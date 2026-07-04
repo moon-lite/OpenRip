@@ -1,0 +1,7 @@
+ref,part,component,qty,est_cost_usd,supplier,link,notes
+MCU1,MCU,Seeed XIAO ESP32-C3,1,5.00,Seeed Studio,https://example.com/placeholder-xiao-esp32c3,Onboard LiPo charging and BLE
+HS1,Spin sensor,SS49E linear hall sensor,1,1.00,TBD,https://example.com/placeholder-ss49e,"Analog output; needs comparator for M0 pulse counting — see wiring.md (A3144 is the simpler digital option)"
+MAG1,Spin sensor,3mm neodymium disc magnet,1,0.50,TBD,https://example.com/placeholder-magnet,Mounted on launcher chuck; 1 pulse/rev
+BT1,Battery,401030 LiPo 100mAh,1,4.00,TBD,https://example.com/placeholder-lipo,Charged via XIAO onboard charger
+SW1,Switch,SPDT slide switch,1,0.50,TBD,https://example.com/placeholder-spdt,Power switch
+H1,Housing,PLA filament (clip-on shell),1,0.30,TBD,https://example.com/placeholder-pla,Clips to string launcher grip rail; models in /models

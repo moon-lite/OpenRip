@@ -1,0 +1,21 @@
+# PlatformIO
+firmware/.pio/
+firmware/.vscode/
+*.bin
+*.elf
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# macOS
+.DS_Store
+
+# Web (M2+)
+node_modules/
+dist/
+
+# Fusion / CAD temp
+*.f3d.bak
+~$*
