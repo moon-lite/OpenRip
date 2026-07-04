@@ -1,0 +1,14 @@
+{
+  "name": "OpenRip",
+  "version": "0.0.0-dev",
+  "home_assistant_domain": "",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-C3",
+      "parts": [
+        { "path": "openrip-merged.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
