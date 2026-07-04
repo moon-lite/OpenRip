@@ -42,7 +42,8 @@ pio run -t upload       # flash over USB-C
 pio device monitor      # launch summaries at 115200 baud
 ```
 
-**Browser-based flashing via ESP Web Tools arrives at M3** — until then,
+**Browser-based flashing via ESP Web Tools arrives at M3** — the flash page
+stub lives at `app/flash/`, but until a release ships a firmware binary,
 flashing requires PlatformIO.
 
 ## License

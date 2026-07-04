@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flash OpenRip</title>
+  <!-- Pinned version: SRI requires an exact file. Note the hash only covers
+       this entry module, not the files it imports at runtime from unpkg. -->
+  <script type="module"
+          src="https://unpkg.com/esp-web-tools@10.2.1/dist/web/install-button.js?module"
+          integrity="sha384-oFiypK2V+NTsHUeObsYhTrn4b+DYnWku6hAO87NX7TIemLlPdqAf3uSe2DuUdTc9"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+  <h1>Flash OpenRip firmware</h1>
+
+  <p>
+    <strong>Stub — live at M3.</strong> The manifest points at a firmware
+    binary that ships with the first GitHub Release; until then the install
+    button below will fail to find anything to flash.
+  </p>
+
+  <p>
+    Plug the XIAO ESP32-C3 in over USB-C and click install. Requires Chrome
+    or Edge on desktop (Web Serial); Firefox and Safari are not supported.
+  </p>
+
+  <esp-web-install-button manifest="manifest.json">
+    <span slot="unsupported">
+      Your browser does not support Web Serial — use Chrome or Edge on desktop.
+    </span>
+    <span slot="not-allowed">
+      Serial access was denied. Reload and grant permission when prompted.
+    </span>
+  </esp-web-install-button>
+
+  <p>
+    Until M3, flash from source instead:
+    <code>cd firmware &amp;&amp; pio run -t upload</code>
+  </p>
+</body>
+</html>

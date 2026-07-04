@@ -20,7 +20,15 @@
 
 ## M3 — Public v0.1
 
-<!-- Flashing from the browser with ESP Web Tools; companion video. -->
+<!-- Flashing from the browser with ESP Web Tools; companion video.
+     Flash page stub: /app/flash/ (index.html + manifest.json). Each release
+     needs a single merged binary at offset 0, built from the pio output:
+       esptool.py --chip esp32c3 merge_bin -o openrip-merged.bin \
+         0x0    firmware/.pio/build/m0-serial/bootloader.bin \
+         0x8000 firmware/.pio/build/m0-serial/partitions.bin \
+         0x10000 firmware/.pio/build/m0-serial/firmware.bin
+     Attach it to the GitHub Release and point manifest.json at it. -->
+
 
 ## M4 — v0.2 IMU
 
