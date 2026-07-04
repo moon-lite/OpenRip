@@ -43,3 +43,12 @@
 // How often to push live RPM to the BLE training-mode stream while spinning
 // (no-op in serial-only builds).
 #define LIVE_RPM_PERIOD_MS 100UL
+
+// --- Power (SPEC §4, builds with -DOPENRIP_ENABLE_SLEEP) ----------------------
+
+// Wake/user button, wired to GND (internal pull-up). D2 = GPIO4 on the XIAO
+// ESP32-C3; deep-sleep GPIO wake on the C3 only works on GPIO0–5.
+#define PIN_BUTTON D2
+
+// Deep sleep after this long with no pulses and no BLE client (SPEC: 5 min).
+#define IDLE_SLEEP_TIMEOUT_MS (5UL * 60UL * 1000UL)

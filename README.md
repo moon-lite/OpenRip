@@ -15,9 +15,9 @@ for the full spec.
 
 | Milestone | Scope | Status |
 |---|---|---|
-| M0 | Sensor proof — breadboard hall + ESP32, RPM over serial | 🚧 In progress |
-| M1 | v0.1 device — BLE launch records, printed housing, battery | Planned |
-| M2 | Web Bluetooth app on GitHub Pages | Planned |
+| M0 | Sensor proof — breadboard hall + ESP32, RPM over serial | 🚧 Awaiting hardware validation |
+| M1 | v0.1 device — BLE launch records, printed housing, battery | 🚧 Firmware done, housing/battery pending |
+| M2 | Web Bluetooth app on GitHub Pages | 🚧 [App live](https://moon-lite.github.io/OpenRip/), needs on-device testing |
 | M3 | Public v0.1 — build guide, ESP Web Tools flashing | Planned |
 | M4 | v0.2 — IMU launch angle, calibration, smoothness | Planned |
 | M5 | Custom PCB + kits (optional) | Maybe |

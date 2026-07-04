@@ -11,6 +11,10 @@
 #include "launch_record.h"
 #include "ble_service.h"
 
+#ifdef OPENRIP_ENABLE_SLEEP
+#include <esp_sleep.h>
+#endif
+
 // --- Pulse capture (shared with ISR) -----------------------------------------
 
 static portMUX_TYPE g_pulseMux = portMUX_INITIALIZER_UNLOCKED;
@@ -85,6 +89,25 @@ static void reportLaunch(uint32_t pulses, uint32_t firstUs, uint32_t lastUs, uin
     bleNotifyLaunch(rec);
 }
 
+// --- Power management (M1) ----------------------------------------------------
+
+#ifdef OPENRIP_ENABLE_SLEEP
+// Millis timestamp of the last thing worth staying awake for: boot, a hall
+// pulse, or a connected BLE client.
+static uint32_t s_lastActivityMs = 0;
+
+static void goToSleep() {
+    Serial.println(F("Idle — deep sleeping. Press button to wake."));
+    Serial.flush();
+    // Wake on button press (active low, internal pull-up). C3 deep-sleep GPIO
+    // wake is limited to GPIO0–5; PIN_BUTTON must stay in that range.
+    // TODO(M1 hardware): confirm the internal pull-up holds through deep
+    // sleep on the XIAO; add an external 100k pull-up if it doesn't.
+    esp_deep_sleep_enable_gpio_wakeup(1ULL << PIN_BUTTON, ESP_GPIO_WAKEUP_GPIO_LOW);
+    esp_deep_sleep_start();
+}
+#endif
+
 // --- Arduino entry points -------------------------------------------------------
 
 void setup() {
@@ -93,6 +116,11 @@ void setup() {
 
     pinMode(PIN_HALL, HALL_PIN_MODE);
     attachInterrupt(digitalPinToInterrupt(PIN_HALL), onHallPulse, HALL_TRIGGER_EDGE);
+
+#ifdef OPENRIP_ENABLE_SLEEP
+    pinMode(PIN_BUTTON, INPUT_PULLUP);
+    s_lastActivityMs = millis();
+#endif
 
     bleInit();
 
@@ -108,6 +136,11 @@ void loop() {
     const uint32_t minIntervalUs  = g_minIntervalUs;
     const uint32_t lastIntervalUs = g_lastIntervalUs;
     portEXIT_CRITICAL(&g_pulseMux);
+
+#ifdef OPENRIP_ENABLE_SLEEP
+    if (pulses > 0 || bleIsConnected()) s_lastActivityMs = millis();
+    if (millis() - s_lastActivityMs >= IDLE_SLEEP_TIMEOUT_MS) goToSleep();
+#endif
 
     if (pulses == 0) {
         delay(1);

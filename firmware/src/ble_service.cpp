@@ -61,10 +61,13 @@ void bleUpdateLiveRpm(uint16_t rpm) {
     g_liveRpmChar->notify();
 }
 
+bool bleIsConnected() { return g_clientConnected; }
+
 #else // serial-only M0 build
 
 void bleInit() {}
 void bleNotifyLaunch(const launch_record_t &) {}
 void bleUpdateLiveRpm(uint16_t) {}
+bool bleIsConnected() { return false; }
 
 #endif // OPENRIP_ENABLE_BLE
