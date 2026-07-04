@@ -1,0 +1,14 @@
+{
+  "projectId": "37b95428-d255-4aa4-a6a0-0da1cf5c787b",
+  "pkg": "@openrip/design",
+  "globalName": "OpenRipDesign",
+  "shape": "package",
+  "buildCmd": "npm run build --prefix design",
+  "cssEntry": "dist/styles.css",
+  "overrides": {
+    "StatTile": {
+      "cardMode": "column"
+    }
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

@@ -1,0 +1,35 @@
+/* OpenRip design tokens — the garage-dyno palette.
+   Source of truth mirrored from app/style.css. */
+
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap");
+
+:root {
+  /* surfaces */
+  --or-bg: #0a0b0d;
+  --or-bg-raise: #101216;
+  --or-line: #23262c;
+
+  /* ink */
+  --or-ink: #e8e6e1;
+  --or-ink-dim: #8a8f98;
+
+  /* signals */
+  --or-accent: #ff3d00;      /* tachometer red-orange: brand, actions */
+  --or-accent-dim: #7a2410;
+  --or-live: #9dff00;        /* acid green: live data, success */
+  --or-danger: #ff3d00;
+
+  /* type */
+  --or-font-display: "Chakra Petch", sans-serif;
+  --or-font-mono: "IBM Plex Mono", monospace;
+
+  /* spacing scale */
+  --or-space-xs: 4px;
+  --or-space-sm: 8px;
+  --or-space-md: 16px;
+  --or-space-lg: 24px;
+  --or-space-xl: 40px;
+
+  /* corner clip used on buttons/tabs */
+  --or-clip: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}

@@ -1,0 +1,180 @@
+/* OpenRip components — class-per-component, consuming tokens.css vars.
+   NOTE: the build prepends tokens.css, so dist/styles.css is self-contained;
+   this source file alone has no token definitions. */
+
+/* Button */
+.or-btn {
+  font-family: var(--or-font-display);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border: 1px solid var(--or-line);
+  background: var(--or-bg-raise);
+  color: var(--or-ink);
+  cursor: pointer;
+  clip-path: var(--or-clip);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.or-btn:hover { border-color: var(--or-accent); color: var(--or-accent); }
+.or-btn--primary { background: var(--or-accent); border-color: var(--or-accent); color: var(--or-bg); }
+.or-btn--primary:hover { background: #ff5c26; color: var(--or-bg); }
+.or-btn--danger:hover { border-color: var(--or-danger); color: var(--or-danger); }
+.or-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* StatusChip */
+.or-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--or-space-sm);
+  padding: 6px 12px;
+  border: 1px solid var(--or-line);
+  font-family: var(--or-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or-ink-dim);
+  background: var(--or-bg-raise);
+}
+.or-chip__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--or-ink-dim); }
+.or-chip--on { color: var(--or-live); border-color: rgba(157, 255, 0, 0.4); }
+.or-chip--on .or-chip__dot {
+  background: var(--or-live);
+  box-shadow: 0 0 10px var(--or-live);
+  animation: or-pulse 1.6s ease-in-out infinite;
+}
+@keyframes or-pulse { 50% { opacity: 0.35; } }
+
+/* Gauge */
+.or-gauge {
+  --or-gauge-fill: 0deg;
+  width: 280px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(from 180deg, var(--or-accent) var(--or-gauge-fill), var(--or-line) var(--or-gauge-fill));
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 0 32px rgba(255, 61, 0, 0.12));
+}
+.or-gauge__inner {
+  width: calc(100% - 22px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #15181d, #0c0e11 70%);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  border: 1px solid var(--or-line);
+}
+.or-gauge__value {
+  font-family: var(--or-font-mono);
+  font-weight: 700;
+  font-size: 56px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--or-ink);
+}
+.or-gauge--live .or-gauge__value { color: var(--or-live); text-shadow: 0 0 30px rgba(157, 255, 0, 0.35); }
+.or-gauge__unit {
+  margin-top: 10px;
+  font-family: var(--or-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--or-ink-dim);
+  text-transform: uppercase;
+}
+
+/* StatTile */
+.or-stat {
+  background: var(--or-bg-raise);
+  border: 1px solid var(--or-line);
+  padding: 18px 22px;
+  min-width: 140px;
+}
+.or-stat__label {
+  font-family: var(--or-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--or-ink-dim);
+}
+.or-stat__value {
+  font-family: var(--or-font-mono);
+  font-size: 26px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  margin-top: 6px;
+  color: var(--or-ink);
+}
+
+/* HazardStripe */
+.or-hazard {
+  height: 8px;
+  background: repeating-linear-gradient(-45deg, var(--or-accent) 0 12px, transparent 12px 24px);
+  opacity: 0.5;
+  border: none;
+}
+
+/* Banner */
+.or-banner {
+  border: 1px solid var(--or-accent-dim);
+  background: rgba(255, 61, 0, 0.06);
+  color: var(--or-ink);
+  padding: 12px 16px;
+  font-family: var(--or-font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Wordmark */
+.or-wordmark {
+  font-family: var(--or-font-display);
+  font-weight: 700;
+  font-size: 36px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--or-ink);
+}
+.or-wordmark__rip { color: var(--or-accent); text-shadow: 0 0 24px rgba(255, 61, 0, 0.45); }
+.or-wordmark__sub {
+  display: block;
+  font-family: var(--or-font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  color: var(--or-ink-dim);
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+/* DataTable */
+.or-table-wrap { overflow-x: auto; border: 1px solid var(--or-line); }
+.or-table { width: 100%; border-collapse: collapse; font-family: var(--or-font-mono); font-size: 14px; }
+.or-table th, .or-table td {
+  text-align: left;
+  padding: 10px 16px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--or-ink);
+}
+.or-table th {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--or-ink-dim);
+  font-weight: 500;
+  border-bottom: 1px solid var(--or-line);
+  background: var(--or-bg-raise);
+}
+.or-table tbody tr { border-bottom: 1px solid var(--or-line); }
+.or-table tbody tr:hover { background: rgba(255, 61, 0, 0.05); }
+.or-table__empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--or-ink-dim);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-family: var(--or-font-mono);
+  font-size: 12px;
+}

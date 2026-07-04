@@ -1,0 +1,26 @@
+{
+  "name": "@openrip/design",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OpenRip design system — garage-dyno telemetry components",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && cat src/tokens.css src/styles.css > dist/styles.css && cp src/tokens.css dist/tokens.css"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "typescript": "^5.4.0"
+  }
+}
