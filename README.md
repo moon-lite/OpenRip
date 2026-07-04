@@ -1,51 +1,76 @@
 # OpenRip
 
-Open-source launch telemetry for Beyblade X. A clip-on module for string
-launchers — Seeed XIAO ESP32-C3 + hall sensor — that measures launch RPM
-(and, in v0.2, launch angle via IMU) and reports over BLE to a Web Bluetooth
-app. ~$20 in parts, a 3D printer, basic soldering. See [SPEC.md](SPEC.md)
-for the full spec.
+**Open-source launch telemetry for Beyblade X.** A ~$20 clip-on module for
+string launchers that measures your launch RPM — and eventually launch angle
+— and beams it to a web app over Bluetooth. No app store, no account, no
+proprietary anything.
 
-> **Trademark note:** "BattlePass" and "Beyblade" are Takara Tomy/Hasbro
-> trademarks. This project is not affiliated with or endorsed by either, and
-> uses those names only descriptively ("compatible with Beyblade X
-> launchers").
+Think of it as a BattlePass you can build, hack, and actually own the data
+from — plus measurements the official one doesn't take.
 
-## Milestones
+> ⚠️ **Project status: early prototype.** The firmware and web app exist, but
+> the sensor hasn't been validated on a real launcher yet and there's no
+> printed housing. Nothing here is ready to build unless you enjoy
+> breadboards. Watch/star the repo if you want to catch the first buildable
+> release.
 
-| Milestone | Scope | Status |
-|---|---|---|
-| M0 | Sensor proof — breadboard hall + ESP32, RPM over serial | 🚧 Awaiting hardware validation |
-| M1 | v0.1 device — BLE launch records, printed housing, battery | 🚧 Firmware done, housing/battery pending |
-| M2 | Web Bluetooth app on GitHub Pages | 🚧 [App live](https://moon-lite.github.io/OpenRip/), needs on-device testing |
-| M3 | Public v0.1 — build guide, ESP Web Tools flashing | Planned |
-| M4 | v0.2 — IMU launch angle, calibration, smoothness | Planned |
-| M5 | Custom PCB + kits (optional) | Maybe |
+## What it does
 
-## Repo layout
+- **Peak launch RPM** from a hall sensor watching a magnet on the launcher
+  chuck (targeting ±2% of the official BattlePass numbers)
+- **Live RPM + launch history** in a [web app](https://moon-lite.github.io/OpenRip/)
+  that connects straight from Chrome — history stays in your browser, exports
+  to CSV
+- **Coming in v0.2:** launch angle relative to the stadium floor, and a rip
+  smoothness score, via an IMU — data the official module doesn't capture
 
-```
-/firmware   PlatformIO project (XIAO ESP32-C3, Arduino framework)
-/hardware   BOM, wiring guide
-/models     Housing CAD (from M1)
-/app        Web Bluetooth app (from M2)
-/docs       Build guide, calibration
-SPEC.md     Full project spec — source of truth
-```
+## What's in the box
 
-## Building the firmware
+| | |
+|---|---|
+| Brains | Seeed XIAO ESP32-C3 (~$5) |
+| Sensor | Hall effect sensor + 3mm magnet on the chuck (~$2) |
+| Power | 100mAh LiPo, charges over USB-C (~$4) |
+| Body | 3D-printed clip-on shell for the string launcher grip rail |
+
+Full parts list in [`hardware/BOM.csv`](hardware/BOM.csv), wiring in
+[`hardware/wiring.md`](hardware/wiring.md).
+
+## Try the app
+
+The web app is live at **[moon-lite.github.io/OpenRip](https://moon-lite.github.io/OpenRip/)** —
+no hardware needed to poke around: hit **SIM LAUNCH** to see it work.
+Real connections need Chrome or Edge (Web Bluetooth doesn't exist on iOS).
+
+## Roadmap
+
+1. ✅ Firmware + web app written
+2. 🔜 **Sensor validation on a real launcher** ← we are here
+3. Printed housing + battery → first real device
+4. Public v0.1: build guide, video, flash-from-browser
+5. v0.2: IMU for launch angle + smoothness
+
+Details live in [SPEC.md](SPEC.md); build instructions grow in
+[`docs/build-guide.md`](docs/build-guide.md) as each stage lands.
+
+## For developers
 
 ```sh
 cd firmware
-pio run                 # build (serial-only M0)
+pio run                 # build (serial-only)
 pio run -t upload       # flash over USB-C
 pio device monitor      # launch summaries at 115200 baud
 ```
 
-**Browser-based flashing via ESP Web Tools arrives at M3** — the flash page
-stub lives at `app/flash/`, but until a release ships a firmware binary,
-flashing requires PlatformIO.
+Flashing from the browser (ESP Web Tools) ships with the first release —
+the page is already stubbed at [`app/flash/`](app/flash/).
 
-## License
+## Legal
 
-Firmware and app: MIT (planned). Hardware and models: CERN-OHL-P (planned).
+"Beyblade" and "BattlePass" are trademarks of Takara Tomy / Hasbro. This
+project is not affiliated with, endorsed by, or connected to either company;
+the names are used only descriptively ("compatible with Beyblade X
+launchers").
+
+Licenses (planned): MIT for firmware and app, CERN-OHL-P for hardware and
+models.
