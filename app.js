@@ -83,7 +83,7 @@ function setStatus(connected, label) {
   el.chip.classList.toggle("chip--on", connected);
   el.chip.classList.toggle("chip--off", !connected);
   el.status.textContent = label;
-  el.connect.textContent = connected ? "DISCONNECT" : "CONNECT";
+  el.connect.textContent = connected ? "Disconnect" : "Connect";
 }
 
 function renderStats() {
@@ -140,11 +140,11 @@ async function connect() {
     optionalServices: [SERVICE_UUID],
   });
   device.addEventListener("gattserverdisconnected", () => {
-    setStatus(false, "OFFLINE");
+    setStatus(false, "Offline");
     setLiveRpm(0);
   });
 
-  setStatus(false, "LINKING…");
+  setStatus(false, "Linking…");
   const server = await device.gatt.connect();
   const service = await server.getPrimaryService(SERVICE_UUID);
 
@@ -161,7 +161,7 @@ async function connect() {
   });
   await liveChar.startNotifications();
 
-  setStatus(true, "LINKED");
+  setStatus(true, "Linked");
 }
 
 async function onConnectClick() {
@@ -173,7 +173,7 @@ async function onConnectClick() {
   try {
     await connect();
   } catch (err) {
-    setStatus(false, "OFFLINE");
+    setStatus(false, "Offline");
     if (err?.name !== "NotFoundError") { // NotFoundError = user closed the picker
       console.error("[openrip]", err);
       alert(`Connection failed: ${err.message ?? err}`);
