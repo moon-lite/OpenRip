@@ -1,13 +1,13 @@
 export interface StatusChipProps {
-  /** True renders the acid-green live state with a pulsing dot; false the dim offline state. */
+  /** True renders the teal live state with a pulsing dot; false the dim offline state. */
   online?: boolean;
-  /** Short uppercase status text, e.g. "LINKED" or "OFFLINE". */
+  /** Short status text, e.g. "Linked" or "Offline". */
   label: string;
 }
 
 /**
- * Connection status indicator chip with a pulsing dot. Shows device/link
- * state: green pulsing when online, dim grey when offline.
+ * Connection status pill with a pulsing dot. Shows device/link state:
+ * teal pulsing when online, dim grey when offline.
  */
 export function StatusChip({ online = false, label }: StatusChipProps) {
   return (

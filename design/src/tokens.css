@@ -1,26 +1,27 @@
-/* OpenRip design tokens — clean, bold, dark-first.
+/* open=rip design tokens — light editorial, zine-clean (ray=out energy).
    Source of truth mirrored by app/style.css. */
 
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap");
 
 :root {
-  /* surfaces */
-  --or-bg: #0a0b0d;
-  --or-bg-raise: #101216;
-  --or-line: #23262c;
+  /* surfaces — paper, not pixels */
+  --or-bg: #fbfaf7;
+  --or-bg-raise: #ffffff;
+  --or-line: #e5e2da;
+  --or-line-strong: #171c22;
 
   /* ink */
-  --or-ink: #e8e6e1;
-  --or-ink-dim: #8a8f98;
+  --or-ink: #171c22;
+  --or-ink-dim: #8b8f94;
 
   /* signals */
-  --or-accent: #ff3d00;      /* tachometer red-orange: brand, actions */
-  --or-accent-dim: #7a2410;
-  --or-live: #9dff00;        /* acid green: live data, success */
-  --or-danger: #ff3d00;
+  --or-accent: #0fb5b1;      /* trapar teal: brand, live data, links */
+  --or-accent-wash: #e6f6f5;
+  --or-live: #0fb5b1;
+  --or-danger: #ff5c39;      /* coral: destructive, redline */
 
-  /* type — one family, weight does the work */
-  --or-font: "Outfit", sans-serif;
+  /* type — one family, italics carry motion */
+  --or-font: "Instrument Sans", sans-serif;
 
   /* spacing scale */
   --or-space-xs: 4px;
@@ -29,7 +30,7 @@
   --or-space-lg: 24px;
   --or-space-xl: 40px;
 
-  /* corners */
-  --or-radius: 10px;
-  --or-radius-lg: 14px;
+  /* corners — pills for controls, none for editorial surfaces */
+  --or-radius-pill: 999px;
+  --or-radius: 12px;
 }

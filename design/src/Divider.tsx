@@ -1,6 +1,6 @@
 /**
- * Accent divider rule — a thin orange line fading to transparent. A clean
- * section separator; use sparingly, typically once under the header.
+ * Hairline editorial rule in ink. A clean section separator; use under the
+ * header and between major sections, magazine-style.
  */
 export function Divider() {
   return <div className="or-divider" aria-hidden="true" />;

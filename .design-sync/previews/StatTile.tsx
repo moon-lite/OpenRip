@@ -9,7 +9,7 @@ export const Single = () => (
 );
 
 export const StatsGrid = () => (
-  <div style={{ ...dark, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
+  <div style={{ ...dark, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
     <StatTile label="Session Best" value="11,240" />
     <StatTile label="Session Avg" value="9,872" />
     <StatTile label="Launches" value="14" />

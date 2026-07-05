@@ -8,9 +8,9 @@ export interface StatTileProps {
 }
 
 /**
- * Boxed metric tile: tiny uppercase label over a large tabular-numeral
- * value. Compose several in a grid for session stats; use "—" as the value
- * for not-yet-available data.
+ * Editorial stat block: a bold top rule, small lowercase label, and a large
+ * tabular numeral — like a magazine index entry. Compose several in a row
+ * or grid for session stats; use "—" as the value for not-yet-available data.
  */
 export function StatTile({ label, value }: StatTileProps) {
   return (

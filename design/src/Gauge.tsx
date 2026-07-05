@@ -12,10 +12,10 @@ export interface GaugeProps {
 }
 
 /**
- * Circular tachometer gauge — the hero readout. A conic arc sweeps
- * tachometer-orange as `value` approaches `max`; the number turns acid green
- * whenever the value is non-zero (data is live). Use for the primary live
- * metric on a screen; pair with StatTile for secondary numbers.
+ * Circular gauge — the hero readout. A teal conic arc sweeps a light track
+ * as `value` approaches `max`; the numeral turns teal whenever the value is
+ * non-zero (data is live). Use for the primary live metric on a screen;
+ * pair with StatTile for secondary numbers.
  */
 export function Gauge({ value, max = 15000, unit = "RPM · LIVE", size = 280 }: GaugeProps) {
   const deg = Math.min(Math.max(value, 0) / max, 1) * 360;

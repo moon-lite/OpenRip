@@ -17,8 +17,11 @@
   any converter run.
 - `overrides.StatTile.cardMode = column`: the StatsGrid story is wider than
   a grid cell ([GRID_OVERFLOW] fix, presentation-only).
-- Components assume a dark ground; all authored previews wrap stories in a
-  `var(--or-bg)` container. Do the same for any new preview.
+- Components assume a LIGHT paper ground (identity v3, 2026-07-04:
+  "open=rip" light editorial / ray=out zine — replaced the dark looks);
+  all authored previews wrap stories in a `var(--or-bg)` container. Do the
+  same for any new preview. The wrappers' inline fallback `#0a0b0d` is stale
+  (never used while the token resolves) — harmless.
 
 ## Known render warns
 

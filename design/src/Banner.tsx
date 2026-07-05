@@ -5,9 +5,9 @@ export interface BannerProps {
 }
 
 /**
- * Inline warning/notice panel with an accent border on a faint accent wash.
- * For persistent conditions the user should know about (unsupported browser,
- * prototype status) — not for transient toasts.
+ * Margin-note panel: a teal left rule on a faint teal wash, italic text —
+ * like an editor's note. For persistent conditions the user should know
+ * about (unsupported browser, prototype status) — not for transient toasts.
  */
 export function Banner({ children }: BannerProps) {
   return <div className="or-banner">{children}</div>;

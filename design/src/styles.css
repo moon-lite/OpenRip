@@ -1,26 +1,30 @@
-/* OpenRip components — class-per-component, consuming tokens.css vars.
+/* open=rip components — class-per-component, consuming tokens.css vars.
    NOTE: the build prepends tokens.css, so dist/styles.css is self-contained;
    this source file alone has no token definitions. */
 
 /* Button */
 .or-btn {
   font-family: var(--or-font);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.01em;
-  padding: 10px 22px;
-  border: 1px solid var(--or-line);
-  border-radius: var(--or-radius);
-  background: var(--or-bg-raise);
-  color: var(--or-ink);
+  padding: 10px 24px;
+  border: 1px solid var(--or-ink);
+  border-radius: var(--or-radius-pill);
+  background: var(--or-ink);
+  color: var(--or-bg);
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.or-btn:hover { border-color: var(--or-accent); color: var(--or-accent); }
-.or-btn--primary { background: var(--or-accent); border-color: var(--or-accent); color: var(--or-bg); }
-.or-btn--primary:hover { background: #ff5c26; color: var(--or-bg); }
-.or-btn--danger:hover { border-color: var(--or-danger); color: var(--or-danger); }
-.or-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.or-btn:hover { background: var(--or-accent); border-color: var(--or-accent); color: #ffffff; }
+.or-btn--ghost, .or-btn--danger {
+  background: transparent;
+  border-color: var(--or-line);
+  color: var(--or-ink);
+}
+.or-btn--ghost:hover { background: transparent; border-color: var(--or-ink); color: var(--or-ink); }
+.or-btn--danger:hover { background: transparent; border-color: var(--or-danger); color: var(--or-danger); }
+.or-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
 /* StatusChip */
 .or-chip {
@@ -29,19 +33,17 @@
   gap: var(--or-space-sm);
   padding: 6px 14px;
   border: 1px solid var(--or-line);
-  border-radius: 999px;
+  border-radius: var(--or-radius-pill);
   font-family: var(--or-font);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 13px;
   color: var(--or-ink-dim);
   background: var(--or-bg-raise);
 }
-.or-chip__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--or-ink-dim); }
-.or-chip--on { color: var(--or-live); border-color: rgba(157, 255, 0, 0.4); }
+.or-chip__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--or-ink-dim); }
+.or-chip--on { color: var(--or-accent); border-color: var(--or-accent); }
 .or-chip--on .or-chip__dot {
-  background: var(--or-live);
+  background: var(--or-accent);
   animation: or-pulse 1.6s ease-in-out infinite;
 }
 @keyframes or-pulse { 50% { opacity: 0.35; } }
@@ -57,7 +59,7 @@
   place-items: center;
 }
 .or-gauge__inner {
-  width: calc(100% - 16px);
+  width: calc(100% - 14px);
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--or-bg-raise);
@@ -67,116 +69,115 @@
 }
 .or-gauge__value {
   font-family: var(--or-font);
-  font-weight: 800;
+  font-weight: 700;
   font-size: 56px;
   font-feature-settings: "tnum";
+  letter-spacing: -0.02em;
   line-height: 1;
   color: var(--or-ink);
 }
-.or-gauge--live .or-gauge__value { color: var(--or-live); }
+.or-gauge--live .or-gauge__value { color: var(--or-accent); }
 .or-gauge__unit {
   margin-top: 10px;
   font-family: var(--or-font);
+  font-style: italic;
   font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-size: 13px;
   color: var(--or-ink-dim);
-  text-transform: uppercase;
 }
 
-/* StatTile */
+/* StatTile — editorial index block: top rule, no box */
 .or-stat {
-  background: var(--or-bg-raise);
-  border: 1px solid var(--or-line);
-  border-radius: var(--or-radius-lg);
-  padding: 18px 22px;
+  background: transparent;
+  border-top: 2px solid var(--or-ink);
+  padding: 12px 2px 4px;
   min-width: 140px;
 }
 .or-stat__label {
   font-family: var(--or-font);
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
   color: var(--or-ink-dim);
 }
 .or-stat__value {
   font-family: var(--or-font);
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
   font-feature-settings: "tnum";
-  margin-top: 6px;
+  letter-spacing: -0.02em;
+  margin-top: 4px;
   color: var(--or-ink);
 }
 
-/* Divider */
+/* Divider — hairline editorial rule */
 .or-divider {
-  height: 2px;
-  background: linear-gradient(90deg, var(--or-accent), transparent);
+  height: 1px;
+  background: var(--or-ink);
   border: none;
-  border-radius: 1px;
 }
 
-/* Banner */
+/* Banner — margin note: teal rule, italic text */
 .or-banner {
-  border: 1px solid var(--or-accent-dim);
-  border-radius: var(--or-radius);
-  background: rgba(255, 61, 0, 0.06);
+  border-left: 3px solid var(--or-accent);
+  background: var(--or-accent-wash);
   color: var(--or-ink);
-  padding: 14px 18px;
+  padding: 12px 18px;
   font-family: var(--or-font);
+  font-style: italic;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-/* Wordmark */
+/* Wordmark — open=rip, lowercase, teal equals */
 .or-wordmark {
   font-family: var(--or-font);
-  font-weight: 800;
+  font-weight: 700;
   font-size: 36px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
   line-height: 1;
   color: var(--or-ink);
+  text-transform: lowercase;
 }
-.or-wordmark__rip { color: var(--or-accent); }
+.or-wordmark__eq { color: var(--or-accent); font-weight: 500; padding: 0 0.04em; }
+.or-wordmark__rip { color: var(--or-ink); }
 .or-wordmark__sub {
   display: block;
   font-family: var(--or-font);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.02em;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0;
   color: var(--or-ink-dim);
   margin-top: 6px;
+  text-transform: lowercase;
 }
 
-/* DataTable */
-.or-table-wrap { overflow-x: auto; border: 1px solid var(--or-line); border-radius: var(--or-radius-lg); }
+/* DataTable — hairlines only, no box */
+.or-table-wrap { overflow-x: auto; }
 .or-table { width: 100%; border-collapse: collapse; font-family: var(--or-font); font-size: 14px; }
 .or-table th, .or-table td {
   text-align: left;
-  padding: 11px 16px;
+  padding: 11px 12px 11px 2px;
   font-feature-settings: "tnum";
   white-space: nowrap;
   color: var(--or-ink);
 }
 .or-table th {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
   color: var(--or-ink-dim);
-  border-bottom: 1px solid var(--or-line);
-  background: var(--or-bg-raise);
+  border-bottom: 2px solid var(--or-ink);
 }
 .or-table tbody tr { border-bottom: 1px solid var(--or-line); }
-.or-table tbody tr:last-child { border-bottom: none; }
-.or-table tbody tr:hover { background: rgba(255, 255, 255, 0.02); }
+.or-table tbody tr:hover { background: var(--or-accent-wash); }
 .or-table__empty {
-  padding: 40px 16px;
-  text-align: center;
+  padding: 40px 2px;
   color: var(--or-ink-dim);
   font-family: var(--or-font);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.02em;
+  font-style: italic;
+  font-size: 14px;
 }

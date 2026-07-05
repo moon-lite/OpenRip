@@ -10,10 +10,10 @@ export interface ButtonProps {
 }
 
 /**
- * Industrial clipped-corner action button. Uppercase display type, angular
- * clip-path corners. Use `primary` for the single main action on a screen
- * (e.g. CONNECT), `ghost` for secondary actions (EXPORT CSV), `danger` for
- * destructive ones (CLEAR).
+ * Pill action button. `primary` is the solid ink pill (teal on hover) — one
+ * per screen (e.g. Connect); `ghost` is a quiet hairline pill for secondary
+ * actions (Export CSV); `danger` warns coral on hover for destructive ones
+ * (Clear).
  */
 export function Button({ variant = "ghost", disabled, onClick, type = "button", children }: ButtonProps) {
   const cls = variant === "ghost" ? "or-btn" : `or-btn or-btn--${variant}`;
