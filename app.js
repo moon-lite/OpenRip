@@ -110,7 +110,7 @@ function renderHistory() {
       ["dim", `${r.rip_duration_ms} ms`],
       ["dim", `${r.battery_pct}%`],
       ["dim", isNaN(t) ? "—" : t.toLocaleTimeString()],
-      ["dim", r.source === "sim" ? "SIM" : "BLE"],
+      ["dim", r.source === "sim" ? "sim" : "ble"],
     ];
     for (const [cls, text] of cells) {
       const td = document.createElement("td");
