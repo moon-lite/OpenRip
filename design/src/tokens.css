@@ -1,7 +1,7 @@
-/* OpenRip design tokens — the garage-dyno palette.
-   Source of truth mirrored from app/style.css. */
+/* OpenRip design tokens — clean, bold, dark-first.
+   Source of truth mirrored by app/style.css. */
 
-@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap");
 
 :root {
   /* surfaces */
@@ -19,9 +19,8 @@
   --or-live: #9dff00;        /* acid green: live data, success */
   --or-danger: #ff3d00;
 
-  /* type */
-  --or-font-display: "Chakra Petch", sans-serif;
-  --or-font-mono: "IBM Plex Mono", monospace;
+  /* type — one family, weight does the work */
+  --or-font: "Outfit", sans-serif;
 
   /* spacing scale */
   --or-space-xs: 4px;
@@ -30,6 +29,7 @@
   --or-space-lg: 24px;
   --or-space-xl: 40px;
 
-  /* corner clip used on buttons/tabs */
-  --or-clip: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  /* corners */
+  --or-radius: 10px;
+  --or-radius-lg: 14px;
 }
