@@ -1,7 +1,9 @@
 ref,part,component,qty,est_cost_usd,supplier,link,notes
-MCU1,MCU,Seeed XIAO ESP32-C3,1,5.00,Seeed Studio,https://example.com/placeholder-xiao-esp32c3,Onboard LiPo charging and BLE
-HS1,Spin sensor,SS49E linear hall sensor,1,1.00,TBD,https://example.com/placeholder-ss49e,"Analog output; needs comparator for M0 pulse counting — see wiring.md (A3144 is the simpler digital option)"
-MAG1,Spin sensor,3mm neodymium disc magnet,1,0.50,TBD,https://example.com/placeholder-magnet,Mounted on launcher chuck; 1 pulse/rev
-BT1,Battery,401030 LiPo 100mAh,1,4.00,TBD,https://example.com/placeholder-lipo,Charged via XIAO onboard charger
-SW1,Switch,SPDT slide switch,1,0.50,TBD,https://example.com/placeholder-spdt,Power switch
-H1,Housing,PLA filament (clip-on shell),1,0.30,TBD,https://example.com/placeholder-pla,Clips to string launcher grip rail; models in /models
+MCU1,MCU,Seeed XIAO ESP32-C3,1,4.99,Seeed Studio,https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html,"3-pack $13.49: https://www.seeedstudio.com/Seeed-Studio-XIAO-ESP32C3-3PCS-p-5920.html — also on Amazon (B0B94JZ2YF). Onboard LiPo charging + BLE"
+HS1,Spin sensor,A3144/3144E hall sensor (digital) 10-pack,1,6.00,Amazon,https://www.amazon.com/A3144-A3144E-OH3144E-Effect-Sensor/dp/B00ATNJH20,"Bare TO-92 sensors — the M0 firmware target. Power from 5V pin, open-collector output to D1 with internal pull-up (see wiring.md). Buy bare sensors, not breakout modules: module boards pull the output up to their 5V supply, which is unsafe for 3.3V GPIOs"
+HS2,Spin sensor (alt/validation),SS49E linear hall 10-pack,1,7.00,Amazon,https://www.amazon.com/Hall-Effect-Magnetic-Detector-Terminal-Sensitive/dp/B09TW1Q9FZ,"Analog; needs a comparator for M0 pulse counting, but ideal for measuring the sensor–magnet air gap when designing the sensor arm. Honeywell-brand at Newark 09J1786 if clones disappoint"
+MAG1,Spin sensor,3x1mm N52 neodymium disc magnets 100-pack,1,6.99,Apex Magnets,https://www.apexmagnets.com/magnets/3mm-x-1mm-disc-neodymium-magnet,"Also Amazon B09MDHBCR1 (200pcs). A3144 is unipolar — mark the working pole with a paint dot once found. Stack 2 if the air gap needs more field"
+BT1,Battery (M1),401030 LiPo ~100mAh 3.7V,1,8.00,Amazon,https://www.amazon.com/HAFHNRUY-401030-Lithium-Rechargeable-Battery/dp/B0F9DYDHVX,"M1 — skip for M0 breadboard (USB-C powers it). XIAO has bare BAT solder pads, no connector: buy wired cells and VERIFY POLARITY with a multimeter before soldering — lead colors from these vendors are not trustworthy. 401230 (4x12x30mm) also fits and is easier to find with protection PCM (e.g. B0FT3GG4ZL)"
+SW1,Switch (M1),SS12D00 SPDT mini slide switch 10-pack,1,6.00,Amazon,https://www.amazon.com/Slide-Switch-Mini-SPDT-Breadboard/dp/B0B39NMGHJ,"M1 — 2.54mm pitch, breadboard-friendly. Adafruit 805 is the name-brand equivalent"
+H1,Housing (M1),PLA filament (clip-on shell),1,0.30,any,,Models land in /models after M0 validates sensor placement
+BB1,Prototyping,Breadboard + M-M jumper wires,1,8.00,Amazon,https://www.amazon.com/s?k=breadboard+jumper+wire+kit,"Any 400-point board + jumper kit; skip if you have them"
