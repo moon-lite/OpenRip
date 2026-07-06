@@ -7,15 +7,17 @@
 
 // --- Pins -------------------------------------------------------------------
 
-// QRE1113 phototransistor output (analog). A1 = GPIO3 on the XIAO ESP32-C3
+// TCRT5000 phototransistor output (analog). A1 = GPIO3 on the XIAO ESP32-C3
 // (ADC-capable). Wiring: collector to this pin with a 10k pull-up to 3V3,
 // emitter to GND — more reflection pulls the reading LOW.
 #define PIN_SENSOR A1
 
 // --- Optical sensing tunables -------------------------------------------------
-// PLACEHOLDERS until M0a characterizes the real signal off a stock launcher
-// spool through the mount opening. Use raw mode (send 'r' over serial) to
-// stream ADC samples and pick real thresholds from the observed swing.
+// Target (M0a, confirmed): the winder launcher's factory encoder disc —
+// black/white two-segment, seen through the ~5x5mm top-face window, disc
+// surface ~3mm below. Threshold PLACEHOLDERS until M0b measures the real
+// white/black IR swing: use raw mode (send 'r' over serial) to stream ADC
+// samples and pick thresholds from what you see.
 
 // Software Schmitt trigger, 12-bit ADC counts (0–4095). A pulse registers
 // when the reading falls below LOW (reflective feature in view); the
@@ -24,10 +26,14 @@
 #define SENSOR_THRESH_LOW  1600
 #define SENSOR_THRESH_HIGH 2400
 
-// Optical features on the spool visible per revolution (spokes, ribs, color
-// changes — or the fallback sticker's marks). TBD from M0a; default 1.
-// Used directly in the RPM math.
+// Confirmed M0a: two-segment encoder disc = one dark/light cycle per
+// encoder revolution. Used directly in the RPM math.
 #define PULSES_PER_REV 1
+
+// TODO: encoder-shaft-to-hook ratio, pending tooth count —
+// hook_rpm = encoder_rpm * GEAR_RATIO. Applied in the RPM math (and thus
+// the BLE launch record).
+#define GEAR_RATIO 1.0f
 
 // Glitch filter: reject pulse intervals shorter than this. Size it from
 // PULSES_PER_REV and max plausible RPM: at 15,000 RPM (250 rev/s) and

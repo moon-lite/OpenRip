@@ -1,59 +1,66 @@
-# Wiring — QRE1113 Optical Sensor → XIAO ESP32-C3
+# Wiring — TCRT5000 Optical Sensor → XIAO ESP32-C3
 
-M0 breadboard hookup. The firmware samples the QRE1113's phototransistor on
-an **ADC pin** (`PIN_SENSOR` = A1 = GPIO3, set in `firmware/include/config.h`)
-and converts reflectivity changes into pulses with a software Schmitt
-trigger. The sensor aims at the launcher's exposed rotating spool through
-the BattlePass mount opening — **the launcher is never modified**.
+M0b breadboard hookup. The firmware samples the TCRT5000's phototransistor
+on an **ADC pin** (`PIN_SENSOR` = A1 = GPIO3, set in
+`firmware/include/config.h`) and converts reflectivity changes into pulses
+with a software Schmitt trigger.
 
-## Bare QRE1113 (4 pins, through-hole)
+**Target (confirmed at M0a):** the winder launcher's factory optical
+encoder — a black/white two-segment disc visible through a ~5×5mm clear
+window on the launcher's top face, disc surface ~3mm below the window. The
+launcher is never modified; the sensor just looks through the window the
+official device uses.
 
-The package has two sides: an IR LED (emitter) and a phototransistor
-(detector). Check the datasheet corner marking for pin 1.
+## TCRT5000 hookup
 
-| QRE1113 pin | Via | XIAO ESP32-C3 |
+The package has two domes: an IR LED (blue-tinted) and a phototransistor
+(black). Datasheet: Vishay TCRT5000.
+
+| TCRT5000 pin | Via | XIAO ESP32-C3 |
 |---|---|---|
-| LED anode (1) | 100Ω resistor | 3V3 |
-| LED cathode (2) | — | GND |
-| Phototransistor collector (3) | 10kΩ pull-up to 3V3, tap to pin | A1 (GPIO3) |
-| Phototransistor emitter (4) | — | GND |
+| LED anode (A) | 100Ω resistor | 3V3 |
+| LED cathode (K) | — | GND |
+| Phototransistor collector (C) | 10kΩ pull-up to 3V3, tap to pin | A1 (GPIO3) |
+| Phototransistor emitter (E) | — | GND |
 
-- **Emitter resistor:** (3.3V − ~1.2V Vf) / 100Ω ≈ 21mA — inside the LED's
-  rating. Raise to 220Ω to save power at reduced range once the working
-  distance is known.
-- **Signal sense:** more IR reflected → more phototransistor current → the
-  pulled-up collector reads **lower**. A bright/reflective feature passing
-  the sensor is a dip in the ADC reading; the firmware registers the pulse
-  on the falling crossing (`SENSOR_THRESH_LOW`) and re-arms on the rising
-  one (`SENSOR_THRESH_HIGH`).
-- **Range:** the QRE1113 is happiest at ~1–3mm from the target. M0a
-  measures what the mount opening actually gives us.
+- **Emitter current:** (3.3V − ~1.25V Vf) / 100Ω ≈ 20mA — comfortable for
+  the TCRT5000's LED.
+- **Signal sense:** more IR reflected (white segment in view) → more
+  phototransistor current → the pulled-up collector reads **lower**. The
+  firmware registers a pulse on the falling crossing (`SENSOR_THRESH_LOW`)
+  and re-arms on the rising one (`SENSOR_THRESH_HIGH`).
+- **Distance:** peak sensitivity is ~2.5mm — a near-perfect match for the
+  disc sitting ~3mm below the window with the sensor face flush against it.
 
-## SparkFun analog breakout (easier for breadboarding)
+### Package fit warning
 
-The [analog breakout](https://www.sparkfun.com/sparkfun-line-sensor-breakout-qre1113-analog.html)
-has both resistors onboard: wire VCC → 3V3, GND → GND, OUT → A1. Same
-signal sense (reflection = low). Buy the **analog** version, not the
-digital one (the digital board's capacitor-discharge trick needs different
-firmware).
+The TCRT5000 body (~10.2 × 5.8mm) is **wider than the 5×5mm window** — the
+emitter/detector domes partially overhang the window edges. On the
+breadboard, center the package over the window as best you can and expect
+some signal loss from the overhang. If the white/black swing in raw mode is
+too small to threshold cleanly, the documented fallback is the
+**ITR8307** (compact SMD, fits inside the window footprint) — same wiring
+topology, same firmware.
 
-## Characterizing the signal (M0a/M0b)
+## Characterizing the signal (M0b)
 
 1. Flash and open the monitor: `pio run -t upload && pio device monitor`
 2. Send `r` to toggle **raw mode** — the firmware streams `micros,adc`
    lines at max serial rate.
-3. Hand-spin the spool slowly and watch the swing. Pick thresholds from
-   what you see (defaults are placeholders): set `SENSOR_THRESH_LOW` just
-   below the dips, `SENSOR_THRESH_HIGH` just above the bright-level noise
-   band, and count the dips per revolution → `PULSES_PER_REV`.
-4. Full procedure: `docs/sensor-characterization.md`.
+3. **Hand-crank the winder slowly** and watch the two-level signal: white
+   segment = low readings, black = high. Set `SENSOR_THRESH_LOW` just above
+   the white level, `SENSOR_THRESH_HIGH` just below the black level, with
+   the noise band inside the gap.
+4. Full procedure and M0a findings: `docs/sensor-characterization.md`.
 
 ## Notes
 
-- All sensing tunables live in `firmware/include/config.h`
-  (`PIN_SENSOR`, `SENSOR_THRESH_LOW/HIGH`, `PULSES_PER_REV`,
+- All sensing tunables live in `firmware/include/config.h` (`PIN_SENSOR`,
+  `SENSOR_THRESH_LOW/HIGH`, `PULSES_PER_REV`, `GEAR_RATIO`,
   `MIN_PULSE_INTERVAL_US`).
+- The encoder disc gives 1 pulse/rev of the **encoder shaft** — hook RPM is
+  encoder RPM × `GEAR_RATIO` (tooth count TBD; 1.0 until then).
 - Ambient IR (sunlight, incandescent) shifts the baseline — characterize
-  indoors, and expect the housing to shroud the sensor at M1.
+  indoors; the M1 housing shrouds the sensor.
 - Battery (401030 LiPo) and slide switch wiring lands with M1; for M0 run
   from USB-C.

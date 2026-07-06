@@ -1,8 +1,8 @@
 // OpenRip M0 — optical spin sensing (SPEC.md §8, M0b).
 //
-// Polls a QRE1113 IR reflective sensor over ADC and turns reflectivity
-// changes into pulse timestamps via a software Schmitt trigger (thresholds
-// in config.h). Computes instantaneous and peak RPM from pulse intervals,
+// Polls a TCRT5000 IR reflective sensor aimed at the winder launcher's
+// factory encoder disc and turns reflectivity changes into pulse timestamps
+// via a software Schmitt trigger (thresholds in config.h). Computes instantaneous and peak RPM from pulse intervals,
 // detects launch end after LAUNCH_END_TIMEOUT_MS of silence, and prints a
 // launch summary over serial. Send 'r' over serial to toggle raw mode,
 // which streams "micros,adc" samples for M0a/M0b signal characterization.
@@ -69,9 +69,12 @@ static void sampleSensor() {
 
 // --- Helpers ------------------------------------------------------------------
 
+// Hook RPM from a pulse interval: encoder RPM scaled by the gear ratio
+// (GEAR_RATIO, config.h — 1.0 until the tooth count is known).
 static uint32_t rpmFromIntervalUs(uint32_t intervalUs) {
     if (intervalUs == 0) return 0;
-    return (uint32_t)(60000000ULL / ((uint64_t)intervalUs * PULSES_PER_REV));
+    const uint64_t encoderRpm = 60000000ULL / ((uint64_t)intervalUs * PULSES_PER_REV);
+    return (uint32_t)((float)encoderRpm * GEAR_RATIO + 0.5f);
 }
 
 static void resetCapture() {
@@ -112,8 +115,8 @@ static void reportLaunch() {
 // --- Power management (M1) ----------------------------------------------------
 
 #ifdef OPENRIP_ENABLE_SLEEP
-// Millis timestamp of the last thing worth staying awake for: boot, a spool
-// pulse, or a connected BLE client.
+// Millis timestamp of the last thing worth staying awake for: boot, an
+// encoder pulse, or a connected BLE client.
 static uint32_t s_lastActivityMs = 0;
 
 static void goToSleep() {

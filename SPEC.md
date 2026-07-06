@@ -10,7 +10,7 @@ An open-source, clip-on launcher module that measures launch RPM and launch angl
 
 ## 1. Goals
 
-- **Zero launcher modification (hard requirement):** the device touches only the launcher's built-in mount rail — nothing glued, pressed on, or altered. This is what keeps tournament use on the table.
+- **Zero launcher modification (hard requirement):** the device attaches externally (top-face mount over the factory encoder window) — nothing glued, pressed on, or altered. This is what keeps tournament use on the table.
 - Measure peak launch RPM with accuracy comparable to the official BattlePass (±2% target)
 - Measure launch angle relative to a calibrated stadium plane
 - Capture rip motion profile (accel curve, smoothness/consistency score)
@@ -20,6 +20,7 @@ An open-source, clip-on launcher module that measures launch RPM and launch angl
 
 ## 2. Non-Goals (v0.x)
 
+- String launcher support — v0.1 targets the winder launcher only (it has the factory optical encoder + window the sensor reads; string launcher sensing is a separate problem)
 - Bey-side sensing (MEMS gyros saturate ~333 RPM; bey spins 5–12k)
 - Position tracking / dead reckoning (IMU drift makes it useless)
 - Battle outcome simulation — contact physics is out of scope
@@ -32,28 +33,26 @@ An open-source, clip-on launcher module that measures launch RPM and launch angl
 | Part | Component | Est. cost |
 |---|---|---|
 | MCU | Seeed XIAO ESP32-C3 | $5 |
-| Spin sensor | QRE1113 IR reflective sensor, aimed at the launcher's exposed rotating spool through the BattlePass mount opening (same sensing approach as the official module — launcher stays stock) | $1 |
+| Spin sensor | TCRT5000 IR reflective sensor, reading the winder launcher's **factory optical encoder** — a black/white two-segment disc visible through a ~5×5mm clear window on the top face, disc surface ~3mm below the window (this is what the official device reads; launcher stays stock). Peak sensitivity ~2.5mm matches the recess. Fallback: ITR8307 if the TCRT5000's signal swing is poor. | $1 |
 | Battery | 401030 LiPo 100mAh (XIAO onboard charging) | $4 |
 | Switch | SPDT slide | $0.50 |
-| Housing | PLA, clip-on to string launcher grip rail | ~$0.30 |
-
-Fallback if stock spool geometry doesn't produce clean reflectivity pulses: a **removable** high-contrast sticker on the spool (peels off clean — still zero permanent modification, but weaker for tournament optics; avoid if stock geometry works).
+| Housing | PLA, top-face mount over the encoder window (winder launcher) | ~$0.30 |
 
 ### v0.2 — Adds IMU
 | Part | Component | Est. cost |
 |---|---|---|
 | IMU | LSM6DSO 6-axis (I2C) on launcher body | $5–8 |
 
-**Optical signal quality off stock spool geometry is the primary technical risk.** Pulses-per-rev and surface contrast through the mount opening are unknown until measured (M0a). Sensor distance is a solved problem by comparison — the mount rail fixes it. Characterize before any CAD.
+**Signal-quality risk is now LOW** (M0a complete, 2026-07): the launcher ships with a purpose-built encoder disc — we're reading a surface designed to be read. The remaining unknown is IR contrast between the **translucent white** and black segments at the TCRT5000's wavelength (the disc was tuned for the official sensor, not ours); M0b measures it. Sticker fallbacks are obsolete.
 
 ### Small-batch path (later)
-Custom PCB (ESP32-C3 module + bare LSM6DSO + QRE1113), JLCPCB assembly: ~$8–12/unit @ qty 50.
+Custom PCB (ESP32-C3 module + bare LSM6DSO + TCRT5000), JLCPCB assembly: ~$8–12/unit @ qty 50.
 
 ## 4. Firmware
 
 - **Stack:** PlatformIO, Arduino framework on ESP32-C3
-- **RPM:** QRE1113 reflectivity edges → ADC threshold with hysteresis (or comparator-style digital read) → interval timing. Pulses/rev is a config constant, TBD from M0a stock-geometry characterization; peak RPM = min interval during launch window. Launch end = no pulse for 250ms. Serial raw mode streams ADC samples for signal characterization.
-- **IMU (v0.2):** LSM6DSO @ 416Hz over I2C, Madgwick fusion for orientation. Log accel/orientation ring buffer during rip; snapshot orientation at final spool pulse = release angle.
+- **RPM:** TCRT5000 reflectivity edges off the factory encoder disc → ADC threshold with hysteresis → interval timing. Two-segment disc = 1 pulse/encoder-rev (config constant); hook RPM = encoder RPM × GEAR_RATIO (config, pending tooth count). Peak RPM = min interval during launch window. Launch end = no pulse for 250ms. Serial raw mode streams ADC samples for signal characterization.
+- **IMU (v0.2):** LSM6DSO @ 416Hz over I2C, Madgwick fusion for orientation. Log accel/orientation ring buffer during rip; snapshot orientation at final encoder pulse = release angle.
 - **Calibration:** button-triggered 2s rest on stadium floor (or rim jig) → zero orientation to stadium plane. Store in NVS.
 - **BLE:** GATT server, custom service. Notify characteristic pushes a launch record post-launch; second characteristic for live RPM stream (training mode).
 - **Power:** deep sleep after 5 min idle, wake on motion (IMU interrupt) or button.
@@ -80,8 +79,9 @@ Custom PCB (ESP32-C3 module + bare LSM6DSO + QRE1113), JLCPCB assembly: ~$8–12
 ## 6. Housing
 
 - Modeled in Fusion; publish **STEP + STL + source (.f3d)**
-- Clips to Takara Tomy string launcher grip rail (official BattlePass mount point)
-- Two-part shell: sensor window (fixed QRE1113 aim through the mount opening) + electronics bay
+- Mounts on the **top face of the winder launcher**, over the factory encoder window — registers against the top-face geometry (not the grip rail)
+- Holds the TCRT5000 centered over the ~5×5mm window at ~0mm standoff (sensor face flush to the window; the disc sits ~3mm below, at the sensor's sweet spot)
+- Two-part shell: sensor carrier + electronics bay
 - Print settings documented; no supports as a design goal
 
 ## 7. Repo Layout
@@ -100,8 +100,8 @@ SPEC.md        this document
 
 ## 8. Milestones
 
-- **M0a — Mount characterization:** physically characterize the BattlePass mount opening — what's visible through it, what rotates, surface features (spokes/ribs/color changes usable as optical marks), working distance. *Gates M0b.*
-- **M0b — Sensor proof:** breadboard QRE1113 + ESP32, clean pulse train off a real launcher through the mount opening, serial output. *Go/no-go gate for everything else.*
+- **M0a — Mount characterization: ✅ complete (2026-07).** Winder launcher has a factory optical encoder — two-segment black/white disc through a ~5×5mm top-face window, disc ~3mm down. Findings: docs/sensor-characterization.md.
+- **M0b — Sensor proof:** breadboard TCRT5000 + ESP32, clean two-level signal off the encoder disc (hand-crank first, then real launches), serial output. *Go/no-go gate for everything else.*
 - **M1 — v0.1 device:** BLE launch records, printed housing, battery power
 - **M2 — App:** Web Bluetooth page live on Pages, history + export
 - **M3 — Public v0.1:** repo cleanup, build guide + video, ESP Web Tools flashing. Post to WBO + r/BeybladeX
@@ -114,5 +114,5 @@ SPEC.md        this document
 2. SP↔RPM relationship — worth matching official app numbers for community comparability?
 3. Mimic the reverse-engineered official BLE protocol (WBO thread) so community apps work, or stay clean with our own? Leaning own protocol + documented schema.
 4. ~~Magnet on chuck: glue-on acceptable, or design a press-fit printed chuck sleeve so the launcher stays unmodified?~~ Superseded: any launcher modification is out (see Goals). Optical sensing through the mount opening replaces the magnet entirely.
-5. Pulses-per-rev off stock spool geometry — TBD from M0a. Affects RPM math resolution and the glitch-filter floor.
+5. ~~Pulses-per-rev off stock geometry~~ Resolved at M0a: two-segment encoder disc = 1 pulse per encoder rev. Still open: encoder-to-hook gear ratio (tooth count) for true hook RPM.
 6. Tournament legality is TO-discretion even at zero modification — most rulesets allow *official* accessories, not arbitrary attachments. Frame the device as training/casual-legal, tournament-pending; zero modification keeps the door open, it doesn't guarantee entry.
