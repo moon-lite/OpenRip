@@ -34,6 +34,7 @@ An open-source, clip-on launcher module that measures launch RPM and launch angl
 |---|---|---|
 | MCU | Seeed XIAO ESP32-C3 | $5 |
 | Spin sensor | TCRT5000 IR reflective sensor, reading the winder launcher's **factory optical encoder** — a black/white two-segment disc visible through a ~5×5mm clear window on the top face, disc surface ~3mm below the window (this is what the official device reads; launcher stays stock). Peak sensitivity ~2.5mm matches the recess. Fallback: ITR8307 if the TCRT5000's signal swing is poor. | $1 |
+| Bey presence | Subminiature low-force lever microswitch (SPDT, <0.5N actuation, Omron SS-01GL class) riding the launcher's spring plunger next to the encoder window — plunger sits below flush when empty, above flush with a bey locked, drops on release. Gates launch detection and timestamps release. | $1.50 |
 | Battery | 401030 LiPo 100mAh (XIAO onboard charging) | $4 |
 | Switch | SPDT slide | $0.50 |
 | Housing | PLA, top-face mount over the encoder window (winder launcher) | ~$0.30 |
@@ -51,7 +52,8 @@ Custom PCB (ESP32-C3 module + bare LSM6DSO + TCRT5000), JLCPCB assembly: ~$8–1
 ## 4. Firmware
 
 - **Stack:** PlatformIO, Arduino framework on ESP32-C3
-- **RPM:** TCRT5000 reflectivity edges off the factory encoder disc → ADC threshold with hysteresis → interval timing. Two-segment disc = 1 pulse/encoder-rev (config constant); hook RPM = encoder RPM × GEAR_RATIO (config, pending tooth count). Peak RPM = min interval during launch window. Launch end = no pulse for 250ms. Serial raw mode streams ADC samples for signal characterization.
+- **RPM:** TCRT5000 reflectivity edges off the factory encoder disc → ADC threshold with hysteresis → interval timing. Two-segment disc = 1 pulse/encoder-rev; the disc sits on the hook shaft, so the window reads hook RPM directly (GEAR_RATIO = 1.0, kept configurable). Serial raw mode streams ADC samples for signal characterization.
+- **Launch detection (presence-gated state machine):** IDLE → ARMED (plunger high = bey locked) → RIPPING (pulses while armed) → RELEASE (plunger falling edge). The release edge is timestamped; the record carries both **peak RPM** (min interval in the window) and **release RPM** (last pulse interval before the edge). Pulses are ignored while the plunger is low, which rejects winding/re-insertion as false launches. The 250ms pulse timeout survives only as a fallback when the release edge is missed; the switch input is debounced ~5ms. This matches the presumed official BattlePass behavior (presence-gated tracking) and resolves the launch-detection ambiguity of a pure timeout.
 - **IMU (v0.2):** LSM6DSO @ 416Hz over I2C, Madgwick fusion for orientation. Log accel/orientation ring buffer during rip; snapshot orientation at final encoder pulse = release angle.
 - **Calibration:** button-triggered 2s rest on stadium floor (or rim jig) → zero orientation to stadium plane. Store in NVS.
 - **BLE:** GATT server, custom service. Notify characteristic pushes a launch record post-launch; second characteristic for live RPM stream (training mode).
@@ -62,6 +64,7 @@ Custom PCB (ESP32-C3 module + bare LSM6DSO + TCRT5000), JLCPCB assembly: ~$8–1
 {
   seq: uint16,
   peak_rpm: uint16,
+  release_rpm: uint16,       // from last pulse interval before the plunger release edge
   release_pitch_deg: int8,   // v0.2
   release_roll_deg: int8,    // v0.2
   rip_duration_ms: uint16,
@@ -81,6 +84,7 @@ Custom PCB (ESP32-C3 module + bare LSM6DSO + TCRT5000), JLCPCB assembly: ~$8–1
 - Modeled in Fusion; publish **STEP + STL + source (.f3d)**
 - Mounts on the **top face of the winder launcher**, over the factory encoder window — registers against the top-face geometry (not the grip rail)
 - Holds the TCRT5000 centered over the ~5×5mm window at ~0mm standoff (sensor face flush to the window; the disc sits ~3mm below, at the sensor's sweet spot)
+- Positions the bey-presence microswitch lever over the spring plunger adjacent to the window — actuated by the plunger's above-flush travel **without adding force that prevents bey seating** (low-force lever, free pivot)
 - Two-part shell: sensor carrier + electronics bay
 - Print settings documented; no supports as a design goal
 

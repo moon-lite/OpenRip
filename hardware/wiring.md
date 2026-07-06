@@ -42,6 +42,32 @@ too small to threshold cleanly, the documented fallback is the
 **ITR8307** (compact SMD, fits inside the window footprint) — same wiring
 topology, same firmware.
 
+## Bey-presence microswitch (plunger)
+
+Next to the encoder window the winder launcher has a **spring plunger**
+that sits below flush when empty, rises above flush when a bey is locked
+in, and drops the moment the bey releases. A subminiature lever
+microswitch (Omron SS-01GL class, SPDT, low actuation force) rides it and
+gives the firmware a bey-presence input — this is what gates launch
+detection and timestamps the release.
+
+| Microswitch pin | XIAO ESP32-C3 |
+|---|---|
+| COM | D3 (GPIO5) |
+| NO (normally open) | GND |
+| NC | unused |
+
+- The firmware uses `INPUT_PULLUP`: bey locked → plunger up → lever
+  pressed → NO closes → the pin reads **LOW = bey present**. Debounce is
+  in firmware (~5ms, `PLUNGER_DEBOUNCE_MS`).
+- **Force budget matters:** the lever must actuate well below the
+  plunger's spring force so the switch never prevents a bey from seating.
+  SS-01GL actuates at ≤0.49N; if seating feels different with the switch
+  in place, use the longer-lever SS-01GL2 (~0.16N) or move the pivot.
+- On the breadboard, tape/jig the switch so the lever just kisses the
+  plunger at its raised height; verify with the serial state prints
+  (insert bey → `ARMED`, remove → `IDLE`).
+
 ## Characterizing the signal (M0b)
 
 1. Flash and open the monitor: `pio run -t upload && pio device monitor`
@@ -56,10 +82,10 @@ topology, same firmware.
 ## Notes
 
 - All sensing tunables live in `firmware/include/config.h` (`PIN_SENSOR`,
-  `SENSOR_THRESH_LOW/HIGH`, `PULSES_PER_REV`, `GEAR_RATIO`,
-  `MIN_PULSE_INTERVAL_US`).
-- The encoder disc gives 1 pulse/rev of the **encoder shaft** — hook RPM is
-  encoder RPM × `GEAR_RATIO` (tooth count TBD; 1.0 until then).
+  `SENSOR_THRESH_LOW/HIGH`, `PIN_PLUNGER`, `PLUNGER_DEBOUNCE_MS`,
+  `PULSES_PER_REV`, `GEAR_RATIO`, `MIN_PULSE_INTERVAL_US`).
+- The encoder disc is mounted on the hook shaft (confirmed by teardown) —
+  the window reads hook RPM directly (`GEAR_RATIO` = 1.0).
 - Ambient IR (sunlight, incandescent) shifts the baseline — characterize
   indoors; the M1 housing shrouds the sensor.
 - Battery (401030 LiPo) and slide switch wiring lands with M1; for M0 run

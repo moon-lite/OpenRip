@@ -43,11 +43,23 @@
 // eating real pulses. Retune when M0a fixes the real pulses/rev.
 #define MIN_PULSE_INTERVAL_US 200UL
 
+// --- Bey presence (plunger microswitch) ----------------------------------------
+
+// Lever microswitch riding the launcher's spring plunger (rises above flush
+// with a bey locked in, drops on release). D3 = GPIO5 on the XIAO ESP32-C3.
+// COM → this pin (internal pull-up), NO → GND: bey present reads LOW.
+#define PIN_PLUNGER D3
+
+// Debounce window for the plunger switch.
+#define PLUNGER_DEBOUNCE_MS 5UL
+
 // --- Launch detection -----------------------------------------------------------
 
 #define SERIAL_BAUD 115200
 
-// Launch is considered over after this long with no pulses (SPEC §4).
+// FALLBACK ONLY (SPEC §4): the plunger release edge is the primary
+// launch-end trigger; this timeout catches a missed edge — no pulse for
+// this long while ripping ends the launch.
 #define LAUNCH_END_TIMEOUT_MS 250UL
 
 // Ignore "launches" with fewer pulses than this (a lone pulse gives no
