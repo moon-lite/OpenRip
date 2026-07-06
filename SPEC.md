@@ -1,17 +1,17 @@
 # OpenRip — Open Source Launch Telemetry for Beyblade X
 
-**Status:** Draft v0.1 · **License targets:** MIT (firmware/app), CERN-OHL-P (hardware/models)
+**Status:** Draft v0.1 · **Licenses:** MIT (firmware/app), CERN-OHL-P v2 (hardware/models)
 
-An open-source, clip-on launcher module that measures launch RPM and launch angle for Beyblade X, reporting over BLE. Functional alternative to the official BattlePass with data it doesn't capture (IMU) and an open protocol.
+An open-source launcher-mounted module that measures launch RPM and launch angle for Beyblade X, reporting over BLE. Functional alternative to the official Beybattle Pass (BX-09) with data it doesn't capture (IMU) and an open protocol.
 
-> Naming note: "BattlePass" and "Beyblade" are Takara Tomy/Hasbro trademarks. Project name and repo must not use them except descriptively ("compatible with Beyblade X launchers").
+> Naming note: BEYBLADE, BEYBLADE X, and BEYBATTLE PASS are trademarks of Tomy Company, Ltd. and/or its licensee Hasbro, Inc. The official accessory's correct name is "Beybattle Pass" — always call it that (not "BattlePass"). Project name and repo must never use these marks except descriptively/nominatively ("compatible with Beyblade X launchers", "alternative to the official Beybattle Pass") and must never brand this project or its parts with them. Avoid Hasbro's slogan "LET IT RIP!" in product copy.
 
 ---
 
 ## 1. Goals
 
 - **Zero launcher modification (hard requirement):** the device attaches externally (top-face mount over the factory encoder window) — nothing glued, pressed on, or altered. This is what keeps tournament use on the table.
-- Measure peak launch RPM with accuracy comparable to the official BattlePass (±2% target)
+- Measure peak launch RPM with accuracy comparable to the official Beybattle Pass (±2% target)
 - Measure launch angle relative to a calibrated stadium plane
 - Capture rip motion profile (accel curve, smoothness/consistency score)
 - Report over BLE to a Web Bluetooth app — no app store, no account
@@ -53,7 +53,7 @@ Custom PCB (ESP32-C3 module + bare LSM6DSO + TCRT5000), JLCPCB assembly: ~$8–1
 
 - **Stack:** PlatformIO, Arduino framework on ESP32-C3
 - **RPM:** TCRT5000 reflectivity edges off the factory encoder disc → ADC threshold with hysteresis → interval timing. Two-segment disc = 1 pulse/encoder-rev; the disc sits on the hook shaft, so the window reads hook RPM directly (GEAR_RATIO = 1.0, kept configurable). Serial raw mode streams ADC samples for signal characterization.
-- **Launch detection (presence-gated state machine):** IDLE → ARMED (plunger high = bey locked) → RIPPING (pulses while armed) → RELEASE (plunger falling edge). The release edge is timestamped; the record carries both **peak RPM** (min interval in the window) and **release RPM** (last pulse interval before the edge). Pulses are ignored while the plunger is low, which rejects winding/re-insertion as false launches. The 250ms pulse timeout survives only as a fallback when the release edge is missed; the switch input is debounced ~5ms. This matches the presumed official BattlePass behavior (presence-gated tracking) and resolves the launch-detection ambiguity of a pure timeout.
+- **Launch detection (presence-gated state machine):** IDLE → ARMED (plunger high = bey locked) → RIPPING (pulses while armed) → RELEASE (plunger falling edge). The release edge is timestamped; the record carries both **peak RPM** (min interval in the window) and **release RPM** (last pulse interval before the edge). Pulses are ignored while the plunger is low, which rejects winding/re-insertion as false launches. The 250ms pulse timeout survives only as a fallback when the release edge is missed; the switch input is debounced ~5ms. This matches the presumed official Beybattle Pass behavior (presence-gated tracking) and resolves the launch-detection ambiguity of a pure timeout.
 - **IMU (v0.2):** LSM6DSO @ 416Hz over I2C, Madgwick fusion for orientation. Log accel/orientation ring buffer during rip; snapshot orientation at final encoder pulse = release angle.
 - **Calibration:** button-triggered 2s rest on stadium floor (or rim jig) → zero orientation to stadium plane. Store in NVS.
 - **BLE:** GATT server, custom service. Notify characteristic pushes a launch record post-launch; second characteristic for live RPM stream (training mode).
@@ -115,7 +115,7 @@ SPEC.md        this document
 
 ## 9. Open Questions
 
-1. Verify official BattlePass mount geometry vs. designing our own rail clamp (affects M1 CAD)
+1. Verify official Beybattle Pass mount geometry vs. designing our own top-face registration (affects M1 CAD)
 2. SP↔RPM relationship — worth matching official app numbers for community comparability?
 3. Mimic the reverse-engineered official BLE protocol (WBO thread) so community apps work, or stay clean with our own? Leaning own protocol + documented schema.
 4. ~~Magnet on chuck: glue-on acceptable, or design a press-fit printed chuck sleeve so the launcher stays unmodified?~~ Superseded: any launcher modification is out (see Goals). Optical sensing through the mount opening replaces the magnet entirely.

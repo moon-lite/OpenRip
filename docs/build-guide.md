@@ -5,7 +5,7 @@
 
 ## M0a — Mount characterization
 
-<!-- Photograph the BattlePass mount opening, identify the rotating surface
+<!-- Photograph the launcher's top-face encoder window, identify the rotating surface
      and its optical features, measure working distance. Procedure:
      /docs/sensor-characterization.md. Gates M0b. -->
 

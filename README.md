@@ -5,8 +5,9 @@ on top of the winder launcher — touching nothing but the outside — and
 measures your launch RPM, beaming it to a web app over Bluetooth. No app
 store, no account, no proprietary anything.
 
-Think of it as a BattlePass you can build, hack, and actually own the data
-from — plus measurements the official one doesn't take.
+Think of it as an open alternative to the official Beybattle Pass — build
+it, hack it, own your data — plus measurements the official one doesn't
+take.
 
 > ⚠️ **Project status: early prototype.** The firmware and web app exist,
 > and the sensing approach is confirmed (the launcher has a factory optical
@@ -79,10 +80,12 @@ the page is already stubbed at [`app/flash/`](app/flash/).
 
 ## Legal
 
-"Beyblade" and "BattlePass" are trademarks of Takara Tomy / Hasbro. This
-project is not affiliated with, endorsed by, or connected to either company;
-the names are used only descriptively ("compatible with Beyblade X
-launchers").
+BEYBLADE, BEYBLADE X, and BEYBATTLE PASS are trademarks of Tomy Company,
+Ltd. and/or its licensee Hasbro, Inc. This project is not affiliated with,
+sponsored by, or endorsed by either company; the names are used only to
+describe compatibility ("works with Beyblade X winder launchers"). All
+other trademarks are the property of their respective owners.
 
-Licenses (planned): MIT for firmware and app, CERN-OHL-P for hardware and
-models.
+Licenses: firmware and app are MIT (see [LICENSE](LICENSE)); hardware and
+models are CERN-OHL-P v2 (see [hardware/LICENSE](hardware/LICENSE) and
+[models/LICENSE](models/LICENSE)).

@@ -26,6 +26,6 @@ export const LaunchLog = () => (
 
 export const EmptyState = () => (
   <div style={dark}>
-    <DataTable columns={columns} rows={[]} emptyText="No launches logged — let it rip" />
+    <DataTable columns={columns} rows={[]} emptyText="No launches logged — spin one up" />
   </div>
 );

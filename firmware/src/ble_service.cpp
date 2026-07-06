@@ -9,7 +9,7 @@
 
 // Draft UUIDs — placeholders until the protocol is frozen at M1 (SPEC §9 Q3
 // leans toward our own documented schema rather than mimicking the official
-// BattlePass protocol).
+// Beybattle Pass protocol).
 static const char *SERVICE_UUID          = "6f7a0001-52c1-4a8e-b8a5-0e5f1c9d2b00";
 static const char *CHAR_LAUNCH_UUID      = "6f7a0002-52c1-4a8e-b8a5-0e5f1c9d2b00"; // notify: launch_record_t
 static const char *CHAR_LIVE_RPM_UUID    = "6f7a0003-52c1-4a8e-b8a5-0e5f1c9d2b00"; // notify: uint16 live RPM
