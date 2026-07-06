@@ -16,17 +16,18 @@ const LIVE_DECAY_MS  = 600;     // zero the live readout after this long with no
 const HISTORY_KEY    = "openrip.history.v1";
 const HISTORY_CAP    = 500;
 
-// launch_record_t, little-endian, 10 bytes (firmware/include/launch_record.h)
+// launch_record_t, little-endian, 12 bytes (firmware/include/launch_record.h)
 function parseLaunchRecord(dataView) {
-  if (dataView.byteLength < 10) return null;
+  if (dataView.byteLength < 12) return null;
   return {
     seq:               dataView.getUint16(0, true),
     peak_rpm:          dataView.getUint16(2, true),
-    release_pitch_deg: dataView.getInt8(4),
-    release_roll_deg:  dataView.getInt8(5),
-    rip_duration_ms:   dataView.getUint16(6, true),
-    smoothness:        dataView.getUint8(8),
-    battery_pct:       dataView.getUint8(9),
+    release_rpm:       dataView.getUint16(4, true),
+    release_pitch_deg: dataView.getInt8(6),
+    release_roll_deg:  dataView.getInt8(7),
+    rip_duration_ms:   dataView.getUint16(8, true),
+    smoothness:        dataView.getUint8(10),
+    battery_pct:       dataView.getUint8(11),
   };
 }
 
@@ -107,6 +108,7 @@ function renderHistory() {
     const cells = [
       ["", String(i + 1)],
       ["peak", fmt.format(r.peak_rpm)],
+      ["dim", r.release_rpm != null ? fmt.format(r.release_rpm) : "—"],
       ["dim", `${r.rip_duration_ms} ms`],
       ["dim", `${r.battery_pct}%`],
       ["dim", isNaN(t) ? "—" : t.toLocaleTimeString()],
@@ -202,6 +204,7 @@ function simLaunch() {
       logLaunch({
         seq: simSeq++,
         peak_rpm: peak,
+        release_rpm: Math.round(peak * (0.88 + Math.random() * 0.08)),
         release_pitch_deg: 0,
         release_roll_deg: 0,
         rip_duration_ms: durationMs,
@@ -221,7 +224,7 @@ function simLaunch() {
 // --- CSV export ------------------------------------------------------------------------------
 
 function exportCsv() {
-  const cols = ["seq", "peak_rpm", "rip_duration_ms", "release_pitch_deg",
+  const cols = ["seq", "peak_rpm", "release_rpm", "rip_duration_ms", "release_pitch_deg",
                 "release_roll_deg", "smoothness", "battery_pct", "logged_at", "source"];
   const lines = [cols.join(",")];
   for (const r of history) lines.push(cols.map((c) => r[c] ?? "").join(","));
