@@ -16,8 +16,10 @@ from — plus measurements the official one doesn't take.
 
 ## What it does
 
-- **Peak launch RPM** from a hall sensor watching a magnet on the launcher
-  chuck (targeting ±2% of the official BattlePass numbers)
+- **Peak launch RPM** from an IR reflective sensor reading the launcher's
+  spool through the built-in BattlePass mount opening — **zero launcher
+  modification**, same sensing approach as the official module (targeting
+  ±2% of its numbers)
 - **Live RPM + launch history** in a [web app](https://moon-lite.github.io/OpenRip/)
   that connects straight from Chrome — history stays in your browser, exports
   to CSV
@@ -29,7 +31,7 @@ from — plus measurements the official one doesn't take.
 | | |
 |---|---|
 | Brains | Seeed XIAO ESP32-C3 (~$5) |
-| Sensor | Hall effect sensor + 3mm magnet on the chuck (~$2) |
+| Sensor | QRE1113 IR reflective sensor aimed through the mount opening (~$1) |
 | Power | 100mAh LiPo, charges over USB-C (~$4) |
 | Body | 3D-printed clip-on shell for the string launcher grip rail |
 
@@ -45,10 +47,12 @@ Real connections need Chrome or Edge (Web Bluetooth doesn't exist on iOS).
 ## Roadmap
 
 1. ✅ Firmware + web app written
-2. 🔜 **Sensor validation on a real launcher** ← we are here
-3. Printed housing + battery → first real device
-4. Public v0.1: build guide, video, flash-from-browser
-5. v0.2: IMU for launch angle + smoothness
+2. 🔜 **M0a: characterize the mount opening** — what the sensor can see of
+   the rotating spool, working distance, features per rev ← we are here
+3. **M0b: sensor proof** — clean optical pulse train off a real launcher
+4. Printed housing + battery → first real device
+5. Public v0.1: build guide, video, flash-from-browser
+6. v0.2: IMU for launch angle + smoothness
 
 Details live in [SPEC.md](SPEC.md); build instructions grow in
 [`docs/build-guide.md`](docs/build-guide.md) as each stage lands.

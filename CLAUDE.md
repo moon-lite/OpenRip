@@ -1,7 +1,8 @@
 # OpenRip
 
-Open-source launch telemetry for Beyblade X launchers: XIAO ESP32-C3 + hall
-sensor measuring launch RPM, reported over serial (M0) and later BLE.
+Open-source launch telemetry for Beyblade X launchers: XIAO ESP32-C3 + IR
+reflective sensor reading the spool through the BattlePass mount opening
+(zero launcher modification), RPM over serial (M0) and later BLE.
 
 ## Commands (run from /firmware)
 

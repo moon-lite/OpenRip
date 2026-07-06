@@ -1,53 +1,59 @@
-# Wiring — Hall Sensor → XIAO ESP32-C3
+# Wiring — QRE1113 Optical Sensor → XIAO ESP32-C3
 
-M0 breadboard hookup. The firmware counts **digital pulses** on `PIN_HALL`
-(D1 = GPIO3, configured in `firmware/include/config.h`), one pulse per chuck
-revolution from a 3mm neodymium magnet on the launcher chuck.
+M0 breadboard hookup. The firmware samples the QRE1113's phototransistor on
+an **ADC pin** (`PIN_SENSOR` = A1 = GPIO3, set in `firmware/include/config.h`)
+and converts reflectivity changes into pulses with a software Schmitt
+trigger. The sensor aims at the launcher's exposed rotating spool through
+the BattlePass mount opening — **the launcher is never modified**.
 
-Two sensor options — pick one:
+## Bare QRE1113 (4 pins, through-hole)
 
-## Option A — A3144 (digital, open-collector) · simplest for M0
+The package has two sides: an IR LED (emitter) and a phototransistor
+(detector). Check the datasheet corner marking for pin 1.
 
-| A3144 pin | XIAO ESP32-C3 |
-|---|---|
-| 1 (VCC) | **5V** pin (USB VBUS) |
-| 2 (GND) | GND |
-| 3 (OUT) | D1 (GPIO3) |
+| QRE1113 pin | Via | XIAO ESP32-C3 |
+|---|---|---|
+| LED anode (1) | 100Ω resistor | 3V3 |
+| LED cathode (2) | — | GND |
+| Phototransistor collector (3) | 10kΩ pull-up to 3V3, tap to pin | A1 (GPIO3) |
+| Phototransistor emitter (4) | — | GND |
 
-- The A3144 is spec'd for a 4.5–24V supply, so power it from the XIAO's 5V
-  pin. Many clones run at 3.3V but that's out of spec — don't rely on it.
-- The output is **open-collector**, so it never drives the pin high — it only
-  pulls to GND. With the firmware's internal pull-up (`INPUT_PULLUP`) the
-  3.3V GPIO is safe even with a 5V supply. No external resistor needed;
-  add a 10kΩ external pull-up to **3V3** if you see noise on long leads.
-- Idle = high, magnet pass = low → firmware triggers on `FALLING` (default).
-- The A3144 is unipolar: it switches on one magnet pole only. If you get no
-  pulses, flip the magnet.
+- **Emitter resistor:** (3.3V − ~1.2V Vf) / 100Ω ≈ 21mA — inside the LED's
+  rating. Raise to 220Ω to save power at reduced range once the working
+  distance is known.
+- **Signal sense:** more IR reflected → more phototransistor current → the
+  pulled-up collector reads **lower**. A bright/reflective feature passing
+  the sensor is a dip in the ADC reading; the firmware registers the pulse
+  on the falling crossing (`SENSOR_THRESH_LOW`) and re-arms on the rising
+  one (`SENSOR_THRESH_HIGH`).
+- **Range:** the QRE1113 is happiest at ~1–3mm from the target. M0a
+  measures what the mount opening actually gives us.
 
-## Option B — SS49E (analog, per the BOM) · needs a comparator
+## SparkFun analog breakout (easier for breadboarding)
 
-| SS49E pin | XIAO ESP32-C3 |
-|---|---|
-| 1 (VCC) | 3V3 |
-| 2 (GND) | GND |
-| 3 (OUT) | → comparator → D1 (GPIO3) |
+The [analog breakout](https://www.sparkfun.com/sparkfun-line-sensor-breakout-qre1113-analog.html)
+has both resistors onboard: wire VCC → 3V3, GND → GND, OUT → A1. Same
+signal sense (reflection = low). Buy the **analog** version, not the
+digital one (the digital board's capacitor-discharge trick needs different
+firmware).
 
-- The SS49E runs happily at 3.3V (2.7–6.5V range) and outputs an **analog**
-  voltage centered at ~VCC/2 that swings with field strength.
-- The M0 firmware expects clean digital edges on a GPIO interrupt — a raw
-  SS49E output will not trigger reliably. Add a comparator (e.g. LM393 with
-  a trimpot threshold, output pulled up to 3V3) between OUT and D1.
-- Alternative (not in M0 firmware): sample the SS49E with the ADC and detect
-  peaks in software. Deferred — interrupt counting is simpler and faster.
-- Upside of the SS49E: analog field strength readout makes it useful for
-  validating the sensor–magnet air gap (~2–4mm), the primary technical risk
-  called out in SPEC §3.
+## Characterizing the signal (M0a/M0b)
+
+1. Flash and open the monitor: `pio run -t upload && pio device monitor`
+2. Send `r` to toggle **raw mode** — the firmware streams `micros,adc`
+   lines at max serial rate.
+3. Hand-spin the spool slowly and watch the swing. Pick thresholds from
+   what you see (defaults are placeholders): set `SENSOR_THRESH_LOW` just
+   below the dips, `SENSOR_THRESH_HIGH` just above the bright-level noise
+   band, and count the dips per revolution → `PULSES_PER_REV`.
+4. Full procedure: `docs/sensor-characterization.md`.
 
 ## Notes
 
-- Signal pin, pin mode, and trigger edge are set in
-  `firmware/include/config.h` (`PIN_HALL`, `HALL_PIN_MODE`,
-  `HALL_TRIGGER_EDGE`).
+- All sensing tunables live in `firmware/include/config.h`
+  (`PIN_SENSOR`, `SENSOR_THRESH_LOW/HIGH`, `PULSES_PER_REV`,
+  `MIN_PULSE_INTERVAL_US`).
+- Ambient IR (sunlight, incandescent) shifts the baseline — characterize
+  indoors, and expect the housing to shroud the sensor at M1.
 - Battery (401030 LiPo) and slide switch wiring lands with M1; for M0 run
   from USB-C.
-- Validate sensor placement on a breadboard jig before any CAD (SPEC §3).

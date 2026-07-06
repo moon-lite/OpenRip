@@ -3,11 +3,17 @@
 > Skeleton — sections fill in as each milestone lands. SPEC.md §8 is the
 > source of truth for milestone scope.
 
-## M0 — Sensor proof (breadboard)
+## M0a — Mount characterization
 
-<!-- Parts, breadboard wiring (see /hardware/wiring.md), magnet placement on
-     the chuck, flashing over USB, reading launch summaries over serial.
-     Go/no-go gate: clean RPM off a real launcher. -->
+<!-- Photograph the BattlePass mount opening, identify the rotating surface
+     and its optical features, measure working distance. Procedure:
+     /docs/sensor-characterization.md. Gates M0b. -->
+
+## M0b — Sensor proof (breadboard)
+
+<!-- Parts, breadboard wiring (see /hardware/wiring.md), raw-mode threshold
+     tuning, flashing over USB, reading launch summaries over serial.
+     Go/no-go gate: clean pulse train off a real launcher. -->
 
 ## M1 — v0.1 device
 
