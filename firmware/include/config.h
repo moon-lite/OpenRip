@@ -30,9 +30,11 @@
 // encoder revolution. Used directly in the RPM math.
 #define PULSES_PER_REV 1
 
-// TODO: encoder-shaft-to-hook ratio, pending tooth count —
-// hook_rpm = encoder_rpm * GEAR_RATIO. Applied in the RPM math (and thus
-// the BLE launch record).
+// CONFIRMED (teardown, 2026-07): the encoder disc is mounted directly on
+// the hook shaft (16T gear), downstream of the gear train — the window
+// reads hook RPM directly, so the ratio is exactly 1.0. The constant stays
+// for potential future launcher variants where the encoder sits elsewhere:
+// hook_rpm = encoder_rpm * GEAR_RATIO.
 #define GEAR_RATIO 1.0f
 
 // Glitch filter: reject pulse intervals shorter than this. Size it from

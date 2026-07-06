@@ -1,6 +1,6 @@
 # Sensor Characterization
 
-## M0a — Mount characterization ✅ COMPLETE (2026-07)
+## M0a — Mount characterization ✅ FULLY COMPLETE (2026-07, incl. gearing teardown)
 
 **Finding: the winder launcher has a factory optical encoder.** Sensing is
 confirmed viable with zero modification — we read the same surface the
@@ -13,9 +13,11 @@ official device reads.
   the window.
 - **Pulses per revolution:** two segments → **1 dark/light cycle per
   encoder revolution** (`PULSES_PER_REV 1` in config.h).
-- **Open item:** encoder-shaft-to-hook gear ratio (tooth count not yet
-  counted) — `GEAR_RATIO` in config.h stays 1.0 until it is;
-  hook_rpm = encoder_rpm × GEAR_RATIO.
+- **Gearing (confirmed by teardown):** the encoder disc is mounted
+  directly on the **hook shaft** (16T gear), downstream of the gear
+  train — the window reads **hook RPM directly**. `GEAR_RATIO = 1.0`
+  confirmed; the constant remains in config.h for potential future
+  launcher variants.
 - **Remaining signal risk (low):** IR contrast between the *translucent*
   white segment and the black segment at the TCRT5000's wavelength. The
   disc was designed for the official sensor's optics, not ours — M0b
@@ -38,9 +40,8 @@ official device reads.
    - (noise band must fit inside the gap — widen it if crossings chatter)
 5. Rebuild, hand-crank again in normal mode: pulse count should match
    crank revolutions × gearing exactly. Chase any mismatch before step 6.
-6. **Live launches.** Sanity range for hook RPM is 5,000–12,000 once
-   `GEAR_RATIO` is real; with GEAR_RATIO=1.0 you're reading raw encoder
-   RPM — record it and note the ratio is pending.
+6. **Live launches.** The encoder sits on the hook shaft, so readings are
+   hook RPM directly — sanity range 5,000–12,000.
 
 ## Findings log
 

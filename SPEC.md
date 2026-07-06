@@ -114,5 +114,5 @@ SPEC.md        this document
 2. SP↔RPM relationship — worth matching official app numbers for community comparability?
 3. Mimic the reverse-engineered official BLE protocol (WBO thread) so community apps work, or stay clean with our own? Leaning own protocol + documented schema.
 4. ~~Magnet on chuck: glue-on acceptable, or design a press-fit printed chuck sleeve so the launcher stays unmodified?~~ Superseded: any launcher modification is out (see Goals). Optical sensing through the mount opening replaces the magnet entirely.
-5. ~~Pulses-per-rev off stock geometry~~ Resolved at M0a: two-segment encoder disc = 1 pulse per encoder rev. Still open: encoder-to-hook gear ratio (tooth count) for true hook RPM.
+5. ~~Pulses-per-rev off stock geometry~~ Resolved at M0a: two-segment encoder disc = 1 pulse per encoder rev. ~~Encoder-to-hook gear ratio~~ Resolved by teardown: the disc is mounted directly on the hook shaft (16T gear), downstream of the gear train — the window reads hook RPM directly (GEAR_RATIO = 1.0).
 6. Tournament legality is TO-discretion even at zero modification — most rulesets allow *official* accessories, not arbitrary attachments. Frame the device as training/casual-legal, tournament-pending; zero modification keeps the door open, it doesn't guarantee entry.
