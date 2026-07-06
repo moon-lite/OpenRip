@@ -1,25 +1,30 @@
 # OpenRip
 
-**Open-source launch telemetry for Beyblade X.** A ~$20 clip-on module for
-string launchers that measures your launch RPM — and eventually launch angle
-— and beams it to a web app over Bluetooth. No app store, no account, no
-proprietary anything.
+**Open-source launch telemetry for Beyblade X.** A ~$20 module that mounts
+on top of the winder launcher — touching nothing but the outside — and
+measures your launch RPM, beaming it to a web app over Bluetooth. No app
+store, no account, no proprietary anything.
 
 Think of it as a BattlePass you can build, hack, and actually own the data
 from — plus measurements the official one doesn't take.
 
-> ⚠️ **Project status: early prototype.** The firmware and web app exist, but
-> the sensor hasn't been validated on a real launcher yet and there's no
-> printed housing. Nothing here is ready to build unless you enjoy
-> breadboards. Watch/star the repo if you want to catch the first buildable
-> release.
+> ⚠️ **Project status: early prototype.** The firmware and web app exist,
+> and the sensing approach is confirmed (the launcher has a factory optical
+> encoder we read through its window — zero modification). But the signal
+> hasn't been proven on a real launcher yet and there's no printed housing.
+> Nothing here is ready to build unless you enjoy breadboards. Watch/star
+> the repo to catch the first buildable release.
 
 ## What it does
 
-- **Peak launch RPM** from an IR reflective sensor reading the launcher's
-  spool through the built-in BattlePass mount opening — **zero launcher
-  modification**, same sensing approach as the official module (targeting
-  ±2% of its numbers)
+- **Peak and release RPM** from an IR sensor reading the winder launcher's
+  **factory encoder disc** through its built-in window — the exact surface
+  the official module reads. **Zero launcher modification** (targeting ±2%
+  of the official numbers)
+- **True launch detection**: a low-force switch rides the launcher's
+  bey-presence plunger, so tracking arms when a bey locks in and the
+  release moment is timestamped — winding and re-insertion can't fake a
+  launch
 - **Live RPM + launch history** in a [web app](https://moon-lite.github.io/OpenRip/)
   that connects straight from Chrome — history stays in your browser, exports
   to CSV
@@ -31,9 +36,10 @@ from — plus measurements the official one doesn't take.
 | | |
 |---|---|
 | Brains | Seeed XIAO ESP32-C3 (~$5) |
-| Sensor | QRE1113 IR reflective sensor aimed through the mount opening (~$1) |
+| Sensor | TCRT5000 IR reflective sensor over the encoder window (~$1.50) |
+| Presence | Subminiature microswitch riding the bey-release plunger (~$2) |
 | Power | 100mAh LiPo, charges over USB-C (~$4) |
-| Body | 3D-printed clip-on shell for the string launcher grip rail |
+| Body | 3D-printed shell mounting on the winder launcher's top face |
 
 Full parts list in [`hardware/BOM.csv`](hardware/BOM.csv), wiring in
 [`hardware/wiring.md`](hardware/wiring.md).
@@ -47,9 +53,11 @@ Real connections need Chrome or Edge (Web Bluetooth doesn't exist on iOS).
 ## Roadmap
 
 1. ✅ Firmware + web app written
-2. 🔜 **M0a: characterize the mount opening** — what the sensor can see of
-   the rotating spool, working distance, features per rev ← we are here
-3. **M0b: sensor proof** — clean optical pulse train off a real launcher
+2. ✅ **M0a: launcher characterized** — it has a factory optical encoder on
+   the hook shaft, readable through a top-face window, plus a bey-presence
+   plunger we piggyback for launch detection
+3. 🔜 **M0b: signal proof** — clean pulse train off a real launcher
+   ← we are here (waiting on parts)
 4. Printed housing + battery → first real device
 5. Public v0.1: build guide, video, flash-from-browser
 6. v0.2: IMU for launch angle + smoothness
