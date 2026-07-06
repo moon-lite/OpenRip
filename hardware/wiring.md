@@ -45,11 +45,11 @@ topology, same firmware.
 ## Bey-presence microswitch (plunger)
 
 Next to the encoder window the winder launcher has a **spring plunger**
-that sits below flush when empty, rises above flush when a bey is locked
-in, and drops the moment the bey releases. A subminiature lever
-microswitch (Omron SS-01GL class, SPDT, low actuation force) rides it and
-gives the firmware a bey-presence input — this is what gates launch
-detection and timestamps the release.
+that sits below flush when empty, rises **~1mm above flush** when a bey is
+locked in, and drops the moment the bey releases. A subminiature lever
+microswitch (Omron D2F-01FL class: SPDT, <0.5mm differential travel,
+<0.5N actuation) rides it and gives the firmware a bey-presence input —
+this is what gates launch detection and timestamps the release.
 
 | Microswitch pin | XIAO ESP32-C3 |
 |---|---|
@@ -60,10 +60,12 @@ detection and timestamps the release.
 - The firmware uses `INPUT_PULLUP`: bey locked → plunger up → lever
   pressed → NO closes → the pin reads **LOW = bey present**. Debounce is
   in firmware (~5ms, `PLUNGER_DEBOUNCE_MS`).
-- **Force budget matters:** the lever must actuate well below the
-  plunger's spring force so the switch never prevents a bey from seating.
-  SS-01GL actuates at ≤0.49N; if seating feels different with the switch
-  in place, use the longer-lever SS-01GL2 (~0.16N) or move the pivot.
+- **Force and travel budgets matter:** the lever must actuate well below
+  the plunger's spring force (never prevent a bey from seating), and with
+  only ~1mm of plunger travel the switch needs <0.5mm differential travel
+  to discriminate seated vs released. In the M1 housing the switch sits on
+  an adjustable carriage (slot + M2 screw) calibrated once per build — see
+  docs/build-guide.md.
 - On the breadboard, tape/jig the switch so the lever just kisses the
   plunger at its raised height; verify with the serial state prints
   (insert bey → `ARMED`, remove → `IDLE`).

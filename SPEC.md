@@ -85,6 +85,7 @@ Custom PCB (ESP32-C3 module + bare LSM6DSO + TCRT5000), JLCPCB assembly: ~$8–1
 - Mounts on the **top face of the winder launcher**, over the factory encoder window — registers against the top-face geometry (not the grip rail)
 - Holds the TCRT5000 centered over the ~5×5mm window at ~0mm standoff (sensor face flush to the window; the disc sits ~3mm below, at the sensor's sweet spot)
 - Positions the bey-presence microswitch lever over the spring plunger adjacent to the window — actuated by the plunger's above-flush travel **without adding force that prevents bey seating** (low-force lever, free pivot)
+- The microswitch mounts on an **adjustable carriage** (slot + M2 screw), not a fixed pocket: the plunger only rises ~1mm above flush, which is inside FDM print-tolerance stack-up. Builders calibrate the position once — slide until the switch **clicks with a bey seated and releases with it out** — then lock the screw.
 - Two-part shell: sensor carrier + electronics bay
 - Print settings documented; no supports as a design goal
 

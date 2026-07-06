@@ -20,6 +20,19 @@
 <!-- Soldering, battery + switch, printed housing assembly (see /models),
      BLE launch records. -->
 
+### Switch carriage calibration (once per build)
+
+The plunger only rises ~1mm above flush, so the presence switch sits on an
+adjustable carriage (slot + M2 screw) instead of a fixed pocket.
+
+1. Mount the housing on the launcher, carriage screw loose.
+2. With a bey **seated**: slide the carriage toward the plunger until the
+   switch clicks (serial shows `# state: ARMED`).
+3. Remove the bey: the switch must release (`# state: IDLE`). If it stays
+   clicked, back the carriage off a hair and repeat.
+4. Tighten the M2 screw and re-check both states, plus seating feel — the
+   lever must not resist the bey clicking in.
+
 ## M2 — App
 
 <!-- Connecting from the Web Bluetooth app, launch history, CSV export. -->
