@@ -23,6 +23,18 @@ The package has two domes: an IR LED (blue-tinted) and a phototransistor
 | Phototransistor collector (C) | 10kΩ pull-up to 3V3, tap to pin | A1 (GPIO3) |
 | Phototransistor emitter (E) | — | GND |
 
+```
+IR LED side
+  3V3 ──[ 100Ω ]──────── A   (LED anode)
+  GND ──────────────────  K   (LED cathode)
+
+Phototransistor side (pull-up divider — the node between the
+10kΩ and the collector is what A1 actually reads)
+  3V3 ──[ 10kΩ ]──┬────── A1 (GPIO3)   → XIAO ADC input
+                  └────── C   (collector)
+  GND ──────────────────  E   (emitter)
+```
+
 - **Emitter current:** (3.3V − ~1.25V Vf) / 100Ω ≈ 20mA — comfortable for
   the TCRT5000's LED.
 - **Signal sense:** more IR reflected (white segment in view) → more
@@ -56,6 +68,13 @@ this is what gates launch detection and timestamps the release.
 | COM | D3 (GPIO5) |
 | NO (normally open) | GND |
 | NC | unused |
+
+```
+D2F-01FL (SPDT)
+  D3 (GPIO5) ──────────── COM   → XIAO input, INPUT_PULLUP
+  GND ──────────────────── NO
+                           NC   (unused — leave unconnected)
+```
 
 - The firmware uses `INPUT_PULLUP`: bey locked → plunger up → lever
   pressed → NO closes → the pin reads **LOW = bey present**. Debounce is
