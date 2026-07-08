@@ -1,6 +1,7 @@
 # PlatformIO
 firmware/.pio/
 firmware/.vscode/
+firmware/logs/
 *.bin
 *.elf
 

@@ -26,7 +26,7 @@ official device reads.
   domes partially overhang the opening (see hardware/wiring.md). ITR8307
   is the documented fallback if the swing is poor.
 
-## M0b — Signal proof (next)
+## M0b — Signal proof ✅ complete (2026-07)
 
 1. Breadboard per `hardware/wiring.md`: sensor flush over the window,
    centered, AND the plunger microswitch lever positioned over the spring
@@ -59,5 +59,33 @@ official device reads.
 
 ## Findings log
 
-<!-- M0b: raw captures, measured white/black ADC levels, chosen thresholds,
-     gear tooth counts when opened/counted, launch pulse counts. -->
+- **Hand-crank capture (breadboard, IR sensor module with onboard LM393
+  comparator — AO output wired to XIAO D1/A1, no discrete resistors
+  needed):**
+  - Quiet baseline: ~190–230 ADC counts, low noise (±20ish).
+  - Rotation peaks: 600–2400+ depending on hand-crank speed; weakest
+    observed peak ~600.
+  - Clean, monotonic edges, spaced ~300–380ms apart during a slow steady
+    hand-crank (~3 rev/s).
+  - Chosen thresholds: `SENSOR_THRESH_LOW 400`, `SENSOR_THRESH_HIGH 550` —
+    clears the baseline noise floor and still reliably re-arms on the
+    weakest observed peaks. (Prior defaults of 1600/2400 would have missed
+    re-arming on weak cranks entirely.)
+- **Plunger microswitch:** wired (COM → D3, NO → GND) and validated —
+  `IDLE`/`ARMED`/`RIPPING` states transition cleanly. Pin ID note: on this
+  switch only **C** (=COM) and **NC** are silkscreened; the unlabeled
+  third pin is **NO**.
+- **First real launch reports** (bench test, no housing yet — switch
+  manually held/released by hand instead of tracking the real plunger):
+  - Peak RPM 6746 and 6654 — both inside the expected 5,000–12,000
+    hook-RPM range. Confirms the sensor and `GEAR_RATIO` math end-to-end.
+  - All three test launches ended via `pulse timeout (fallback)` rather
+    than `release edge` — expected here, not a defect: release RPM was far
+    below peak RPM in each (bey spinning down while still seated, not
+    physically ejected). Getting a real release-edge trigger needs the
+    switch tracking the actual plunger, which is genuinely fiddly at
+    breadboard scale given only ~1mm of travel — this is exactly what M1's
+    adjustable carriage (build-guide.md) is for.
+- **Go/no-go: PASSED.** Clean two-level pulse train confirmed off a real
+  launcher, with plausible RPM numbers. M0b complete; M1 (printed housing,
+  battery, BLE records) is next.

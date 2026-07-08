@@ -9,11 +9,21 @@
      and its optical features, measure working distance. Procedure:
      /docs/sensor-characterization.md. Gates M0b. -->
 
-## M0b — Sensor proof (breadboard)
+## M0b — Sensor proof (breadboard) ✅ complete
 
-<!-- Parts, breadboard wiring (see /hardware/wiring.md), raw-mode threshold
-     tuning, flashing over USB, reading launch summaries over serial.
-     Go/no-go gate: clean pulse train off a real launcher. -->
+Parts and wiring: `hardware/wiring.md`. Full procedure and measured
+findings: `docs/sensor-characterization.md`.
+
+Short version: flash the `m0-serial` env, `pio device monitor`, send `r`
+for raw ADC mode, hand-crank the winder to capture real white/black
+levels, set `SENSOR_THRESH_LOW`/`HIGH` in `firmware/include/config.h`
+from what you see, reflash, and confirm the pulse count matches crank
+revolutions. Wire the plunger microswitch (COM → D3, NO → GND) to unlock
+the presence-gated launch report — that gives an exact pulse/RPM readout
+instead of hand-counting raw ADC lines.
+
+Go/no-go gate — **passed**: clean two-level pulse train off a real
+launcher, launch RPM readings landing in the expected 5,000–12,000 range.
 
 ## M1 — v0.1 device
 

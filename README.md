@@ -10,11 +10,11 @@ it, hack it, own your data — plus measurements the official one doesn't
 take.
 
 > ⚠️ **Project status: early prototype.** The firmware and web app exist,
-> and the sensing approach is confirmed (the launcher has a factory optical
-> encoder we read through its window — zero modification). But the signal
-> hasn't been proven on a real launcher yet and there's no printed housing.
-> Nothing here is ready to build unless you enjoy breadboards. Watch/star
-> the repo to catch the first buildable release.
+> and the sensing approach is proven on a real launcher — a breadboard
+> build reads clean RPM off the factory optical encoder (zero
+> modification). There's no printed housing yet, so nothing here is ready
+> to build unless you enjoy breadboards. Watch/star the repo to catch the
+> first buildable release.
 
 ## What it does
 
@@ -57,9 +57,10 @@ Real connections need Chrome or Edge (Web Bluetooth doesn't exist on iOS).
 2. ✅ **M0a: launcher characterized** — it has a factory optical encoder on
    the hook shaft, readable through a top-face window, plus a bey-presence
    plunger we piggyback for launch detection
-3. 🔜 **M0b: signal proof** — clean pulse train off a real launcher
-   ← we are here (waiting on parts)
+3. ✅ **M0b: signal proof** — clean pulse train confirmed off a real
+   launcher, launch RPM readings landing in the expected range
 4. Printed housing + battery → first real device
+   ← we are here
 5. Public v0.1: build guide, video, flash-from-browser
 6. v0.2: IMU for launch angle + smoothness
 

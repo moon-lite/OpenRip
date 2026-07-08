@@ -106,7 +106,7 @@ SPEC.md        this document
 ## 8. Milestones
 
 - **M0a — Mount characterization: ✅ complete (2026-07).** Winder launcher has a factory optical encoder — two-segment black/white disc through a ~5×5mm top-face window, disc ~3mm down. Findings: docs/sensor-characterization.md.
-- **M0b — Sensor proof:** breadboard TCRT5000 + ESP32, clean two-level signal off the encoder disc (hand-crank first, then real launches), serial output. *Go/no-go gate for everything else.*
+- **M0b — Sensor proof: ✅ complete (2026-07).** Breadboard IR sensor module (AO output) + ESP32: clean two-level signal off the encoder disc confirmed by hand-crank capture (tuned thresholds `SENSOR_THRESH_LOW 400` / `SENSOR_THRESH_HIGH 550`) and real launch RPM readings (peak 6746 and 6654, both within the expected 5,000–12,000 range). Findings: docs/sensor-characterization.md. *Go/no-go gate: passed.*
 - **M1 — v0.1 device:** BLE launch records, printed housing, battery power
 - **M2 — App:** Web Bluetooth page live on Pages, history + export
 - **M3 — Public v0.1:** repo cleanup, build guide + video, ESP Web Tools flashing. Post to WBO + r/BeybladeX

@@ -15,16 +15,17 @@
 // --- Optical sensing tunables -------------------------------------------------
 // Target (M0a, confirmed): the winder launcher's factory encoder disc —
 // black/white two-segment, seen through the ~5x5mm top-face window, disc
-// surface ~3mm below. Threshold PLACEHOLDERS until M0b measures the real
-// white/black IR swing: use raw mode (send 'r' over serial) to stream ADC
-// samples and pick thresholds from what you see.
+// surface ~3mm below. Measured M0b (2026-07, hand-crank capture): quiet
+// baseline ~190-230, rotation peaks vary 600-2400+ with crank speed —
+// thresholds picked to clear the baseline noise floor and still re-arm on
+// the weakest observed peaks (~600).
 
 // Software Schmitt trigger, 12-bit ADC counts (0–4095). A pulse registers
 // when the reading falls below LOW (reflective feature in view); the
 // detector re-arms when it rises back above HIGH. Gap between them is the
 // hysteresis — keep it wider than the observed noise band.
-#define SENSOR_THRESH_LOW  1600
-#define SENSOR_THRESH_HIGH 2400
+#define SENSOR_THRESH_LOW  400
+#define SENSOR_THRESH_HIGH 550
 
 // Confirmed M0a: two-segment encoder disc = one dark/light cycle per
 // encoder revolution. Used directly in the RPM math.
